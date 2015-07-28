@@ -1,0 +1,15 @@
+[package]
+
+name = "seax_compiler_tools"
+version = "0.0.1"
+authors = ["Hawk Weisman <hi@hawkweisman.me>"]
+description = "General-purpose tools for compilers targeting the Seax platform."
+license = "MIT"
+homepage = "http://hawkweisman.me/seax"
+repository = "https://github.com/hawkw/seax_compiler_tools"
+readme = "README.md"
+keywords = ["vm","lisp","languages"]
+
+[dependencies]
+
+seax_svm = "^0.2.6"
