@@ -7,3 +7,8 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/hawkw/seax/LICENSE)
 
 General purpose bits for compilers targeting the Seax platform
+
+Contributing
+------------
+
+Seax is an open-source project and contributions are happily welcomed. For more information on how to contribute to Seax, please see the [CONTRIBUTING](https://github.com/hawkw/seax/blob/master/CONTRIBUTING.md) document on the main Seax repository.
