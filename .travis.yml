@@ -36,3 +36,4 @@ deploy:
   file: /target/release/libseax_compiler_tools.rlib
   on:
     repo: hawkw/seax_compiler_tools
+    tags: true
