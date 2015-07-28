@@ -4,6 +4,12 @@
 #![feature(staged_api)]
 #![staged_api]
 
+//! Seax Compiler Tools
+//! -------------------
+//!
+//! Library containing general-purpose tools for compiling programs for
+//! the [Seax](hawkweisman.me/seax) platform.
+
 #[macro_use]
 extern crate seax_svm as svm;
 
