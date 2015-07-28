@@ -5,7 +5,7 @@ use std::borrow::Borrow;
 use std::cmp::max;
 use std::ops;
 
-use super::{SymTable,Index};
+use super::{SymTable,Index,Scope};
 
 /// An associative map data structure for representing scopes.
 ///
@@ -443,26 +443,6 @@ impl<'a, 'b, K, Q: ?Sized, V> ops::IndexMut<&'b Q> for ForkTable<'a, K, V>
         }
 
     }
-
-
-/// Trait for a symbol table
-#[stable(feature = "scope", since = "0.0.1")]
-pub trait Scope<K>
-    where K: Eq + Hash
-{
-    /// Bind a name to a scope.
-    ///
-    /// Returnsthe indices for that name in the SVM environment.
-    #[stable(feature = "scope", since = "0.0.1")]
-    fn bind(&mut self, name: K, lvl: u64) -> Index;
-    /// Look up a name against a scope.
-    ///
-    /// Returns the indices for that name in the SVM environment,
-    /// or None if that name is unbound.
-    #[stable(feature = "scope", since = "0.0.1")]
-    fn lookup(&self, name: &K)            -> Option<Index>;
-}
-
 
 /// The symbol table for bound names is represented as a
 /// `ForkTable` mapping `&str` (names) to `(uint,uint)` tuples,

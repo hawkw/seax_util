@@ -25,3 +25,21 @@ pub type SymTable<'a> = self::forktable::ForkTable<'a, &'a str, Index>;
 /// A `CompileResult` is either `Ok(SVMCell)` or `Err(&str)`
 #[stable(feature = "compile", since = "0.0.1")]
 pub type CompileResult = Result<Vec<svm::cell::SVMCell>, String>;
+
+/// Trait for a symbol table
+#[stable(feature = "scope", since = "0.0.1")]
+pub trait Scope<K>
+    where K: Eq + std::hash::Hash
+{
+    /// Bind a name to a scope.
+    ///
+    /// Returnsthe indices for that name in the SVM environment.
+    #[stable(feature = "scope", since = "0.0.1")]
+    fn bind(&mut self, name: K, lvl: u64) -> Index;
+    /// Look up a name against a scope.
+    ///
+    /// Returns the indices for that name in the SVM environment,
+    /// or None if that name is unbound.
+    #[stable(feature = "scope", since = "0.0.1")]
+    fn lookup(&self, name: &K)            -> Option<Index>;
+}
