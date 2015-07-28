@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["ForkTable","An associative map data structure for representing scopes."]]});
