@@ -1,5 +1,4 @@
 [package]
-
 name = "seax_compiler_tools"
 version = "0.0.1"
 authors = ["Hawk Weisman <hi@hawkweisman.me>"]
@@ -11,5 +10,7 @@ readme = "README.md"
 keywords = ["vm","lisp","languages"]
 
 [dependencies]
-
 seax_svm = "^0.2.6"
+
+[features]
+nightly = []
