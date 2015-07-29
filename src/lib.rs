@@ -1,8 +1,8 @@
 #![crate_name = "seax_compiler_tools"]
 #![crate_type = "lib"]
+#![cfg_attr(feature = "nightly" feature(staged_api) )]
+#![cfg_attr(feature = "nightly" staged_api)]
 #![stable(feature = "tools", since = "0.0.1")]
-#![feature(staged_api)]
-#![staged_api]
 
 //! Seax Compiler Tools
 //! -------------------
