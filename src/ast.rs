@@ -2,7 +2,6 @@ use super::CompileResult;
 use super::SymTable;
 
 use std::fmt;
-use svm::bytecode::Encode;
 
 /// Trait for AST nodes.
 #[cfg_attr(feature = "nightly",
