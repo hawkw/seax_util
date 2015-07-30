@@ -29,9 +29,9 @@ after_success:
 before_deploy:
 - travis-cargo doc
 - travis-cargo doc-upload
-- cargo build --release
-- cargo package
-- cargo publish --token $CRATES_TOKEN
+- travis-cargo build -- --release
+- travis-cargo package
+- travis-cargo publish --token $CRATES_TOKEN
 deploy:
   provider: releases
   api_key:
@@ -39,5 +39,5 @@ deploy:
   file: /target/release/libseax_compiler_tools.rlib
   on:
     repo: hawkw/seax_compiler_tools
-    rust: stable
+    rust: nightly
     tags: true
