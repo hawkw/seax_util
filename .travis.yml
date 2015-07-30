@@ -1,37 +1,42 @@
 sudo: false
 language: rust
-rust:
-  - nightly
-  - beta
-  - stable
+matrix:
+  rust:
+    - nightly
+    - beta
+    - stable
+  allow_failures:
+    - rust: beta
+    - rust: stable
+  fast_finish: true
 addons:
   apt:
     packages:
-    - libcurl4-openssl-dev
-    - libelf-dev
-    - libdw-dev
+      - libcurl4-openssl-dev
+      - libelf-dev
+      - libdw-dev
 before_script:
 - |
   pip install 'travis-cargo<0.2' --user &&
   export PATH=$HOME/.local/bin:$PATH
 script:
-- travis-cargo build
-- travis-cargo test
-- travis-cargo bench
+  - travis-cargo build
+  - travis-cargo test
+  - travis-cargo bench
 env:
   global:
   - TRAVIS_CARGO_NIGHTLY_FEATURE="nightly"
   - secure: j0sm+Ru9WxUy93sluAYIhlm+TJocGYKvX4ow3MN4Dya6LSGhCXWZ/ZX0Bjd68y8FkDRAT0KMJVb846cXzqqKRgrX4x60Y3Ka6+p69Tw8DkKPjhpeBNdVWMXXgNWhuqNdlqnZxBcbQuhru84JnDq5Z/AMw1UQ4r/829kdm1aZ1ECpxnrBgXJwikGr77KWP+f/ZTNSUI53sup/1ggPndC8Kc+fPk/rItfsUi6FMFDhzyZ3VRuQLV+I2I+RRiQQUpzcn126XXXsdQM50mDFlLCkNrX/DYVIAc8l6/VIaXZ/9BVKEVs0i5zXq0Nf418tWTGx9fmKuxHLnULv7/0mP1/m2D/vEbjWVMZxDF6h3Gp+2kHTUbk8v31Fm1TTBpFC7CihOcpME9s67b9Te1wzwcvAq24A/ixcTd1u+/3nX0Vjkz9IyVIALJJoFVflnqgqlR7iMJ9h16S3NAeiqm4xCrZZRr5ab9oV2tqqWm1QF5wUM/aCcp06jQiYMnblNa9Sr6gjfcqD1hTC2zrGS5MdLAaJMJjW3qi9awJYoGLyNBxC7d8KFL6AXcyk9tRD/MZA+GeYQ27EDfboc13/Ozs08IR9OXOCaXxpfllLUTU3Vu8cCzEPqN0FO9A04jCIOAj+s/Ad+gfuZM3DEUqXaufab70CZ6AERzJNUFeusIrtfkV3m/o=
   - secure: c4Rwaqr4L5U3DFhtqwwZmpzNmLJZUhNXAkrh307T4k/98QFQMSZPyTtBSXVbHUaiVr9rAqVeVv/Q/+jKUSznLSbV5Q8eIzbbC4oHv7lpvLJTfsuFrDnhr2z51J3sZeUh4h1j2xioybdTr8zoYMVEuBLqx/x30v6swA69F8H8uroLazMPv4POHYWaIFrtzCSZZ7/r1hlasTqA2bezFcq0Hl5ZTht+GN0AsYGcQNuFV8O5KfPyeuI9HOgD43Xg1vaRlRJomtVPklifKNFmCRWhAdA8ARsgJRHbFsoddS6oJhOhtquJg6sscndVpyf0mco0POCqwij/X4rKqpH8worUm+DsYmaytvbUzTPVTo08G6ctZLo4ARoN0X09c5xux4gG79JS0M77s+iJm5f5jye66RwXD/hs5TvSX3i1odspBSLLnY5HPwXr9R2FOZ4wSPei5SyW3BpzJspIjZSFDeCVDPTA0um1gaJy35WWBwE+EeR3aKXhvSitZtKIclIw+t7T4KVgBvVbxeteo4W9rw60/Be4PyzBNUgRz7gizAxhtl4ysQnMrbaxgaijRBDxq4dkae3oBvMKOWzLydo9ZOoRY9oRP9zjkzgFfPBnDONsHi0ffFkNQKKMSwMt9EPQshlgqYZBLVP+6KGI1cDAX1c7K9oLxnZ6RRkGCgKRL2OCxeA=
 after_success:
-- travis-cargo coveralls --no-sudo
-- bash <(curl https://codecov.io/bash)
+  - travis-cargo coveralls --no-sudo
+  - bash <(curl https://codecov.io/bash)
 before_deploy:
-- travis-cargo doc
-- travis-cargo doc-upload
-- travis-cargo build -- --release
-- travis-cargo package
-- travis-cargo publish --token $CRATES_TOKEN
+  - travis-cargo doc
+  - travis-cargo doc-upload
+  - travis-cargo build -- --release
+  - travis-cargo package
+  - travis-cargo publish --token $CRATES_TOKEN
 deploy:
   provider: releases
   api_key:
