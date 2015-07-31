@@ -3,6 +3,12 @@ use super::SymTable;
 
 use std::fmt;
 
+/// Width of one indentation level
+#[cfg_attr(feature = "nightly",
+    stable(feature = "ast", since = "0.0.2")
+)]
+pub const INDENT: &'static str = "\t";
+
 /// Trait for AST nodes.
 #[cfg_attr(feature = "nightly",
     stable(feature = "ast", since = "0.0.1")
@@ -16,7 +22,11 @@ pub trait ASTNode {
                    state: &'a SymTable<'a>
                    )                    -> CompileResult;
 
-    /// Pretty-print this node
+    /// Pretty-print this node to a String.
+    ///
+    /// This should start with this node indented zero spaces, and recursively
+    /// walk the tree downward, increasing the indentation level by `INDENT`
+    /// every step.
     #[cfg_attr(feature = "nightly",
         stable(feature = "ast", since = "0.0.1")
     )]
