@@ -1,6 +1,6 @@
 [package]
 name = "seax_util"
-version = "0.0.1"
+version = "0.1.0"
 authors = ["Hawk Weisman <hi@hawkweisman.me>"]
 description = "General-purpose tools for compilers targeting the Seax platform."
 license = "MIT"
