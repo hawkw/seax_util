@@ -1,3 +1,6 @@
+use std::hash::Hash;
+use super::SVMCell;
+
 /// ForkTable
 /// ---------
 ///
@@ -37,18 +40,18 @@ pub type Index = (u64, u64);
 /// bound to that name.
 #[cfg_attr(feature = "nightly",
     stable(feature = "forktable", since = "0.0.1") )]
-pub type SymTable<'a> = self::forktable::ForkTable<'a, &'a str, Index>;
+pub type SymTable<'a> = forktable::ForkTable<'a, &'a str, Index>;
 
 /// A `CompileResult` is either `Ok(SVMCell)` or `Err(&str)`
 #[cfg_attr(feature = "nightly",
     stable(feature = "compile", since = "0.0.1") )]
-pub type CompileResult = Result<Vec<cell::SVMCell>, String>;
+pub type CompileResult = Result<Vec<SVMCell>, String>;
 
 /// Trait for a symbol table
 #[cfg_attr(feature = "nightly",
     stable(feature = "scope", since = "0.0.1") )]
 pub trait Scope<K>
-    where K: Eq + std::hash::Hash
+    where K: Eq + Hash
 {
     /// Bind a name to a scope.
     ///
