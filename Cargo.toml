@@ -10,7 +10,7 @@ readme = "README.md"
 keywords = ["vm","lisp","languages"]
 
 [dependencies]
-seax_svm = "^0.2.6"
+seax_svm = "^0.2.8"
 
 [features]
 nightly = []
