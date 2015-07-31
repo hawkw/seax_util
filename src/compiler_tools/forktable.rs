@@ -24,7 +24,7 @@ use super::{SymTable,Index,Scope};
 /// reference implementation written by Hawk Weisman for the Decaf
 /// compiler, which is available [here](https://github.com/hawkw/decaf/blob/master/src/main/scala/com/meteorcode/common/ForkTable.scala).
 #[derive(Debug)]
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "forktable", since = "0.0.1") )]
 pub struct ForkTable<'a, K, V>
     where K: 'a + Eq + Hash,
@@ -36,7 +36,7 @@ pub struct ForkTable<'a, K, V>
     level: usize
 }
 
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "forktable", since = "0.0.1") )]
 impl<'a, K, V> ForkTable<'a, K, V>
     where K: Eq + Hash
@@ -79,7 +79,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// let mut level_2: ForkTable<isize,&str> = level_1.fork();
     /// assert_eq!(level_2.get(&1), Some(&"One"));
     /// ```
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn get<Q: ?Sized>(&self, key: &Q) -> Option<&V>
         where K: Borrow<Q>,
@@ -136,7 +136,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// let mut level_2: ForkTable<isize,&str> = level_1.fork();
     /// assert_eq!(level_2.get_mut(&1), None);
     /// ```
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn get_mut<Q: ?Sized>(&mut self, key: &Q) -> Option<&mut V>
         where K: Borrow<Q>,
@@ -190,7 +190,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// assert_eq!(level_2.chain_contains_key(&1), false);
     /// ```
     ///
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn remove(&mut self, key: &K) -> Option<V>
         where K: Clone
@@ -249,7 +249,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// assert_eq!(table.insert(1, "One"), Some("one"));
     /// assert_eq!(table.get(&1), Some(&"One"));
     /// ```
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn insert(&mut self, k: K, v: V) -> Option<V> {
         if self.whiteouts.contains(&k) {
@@ -291,7 +291,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// let mut level_2: ForkTable<isize,&str> = level_1.fork();
     /// assert_eq!(level_2.contains_key(&1), false);
     /// ```
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn contains_key<Q: ?Sized>(&self, key: &Q) -> bool
         where K: Borrow<Q>,
@@ -335,7 +335,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// let mut level_2: ForkTable<isize,&str> = level_1.fork();
     /// assert_eq!(level_2.chain_contains_key(&1), true);
     /// ```
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn chain_contains_key<Q:? Sized>(&self, key: &Q) -> bool
         where K: Borrow<Q>,
@@ -357,7 +357,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// Note that the new `ForkTable<K,V>` has a lifetime
     /// bound ensuring that it will live at least as long as the
     /// parent `ForkTable`.
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn fork(&'a self) -> ForkTable<'a, K,V> {
         ForkTable {
@@ -369,7 +369,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     }
 
     /// Constructs a new `ForkTable<K,V>`
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn new() -> ForkTable<'a, K,V> {
         ForkTable {
@@ -384,7 +384,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     ///
     /// Provides an iterator visiting all values in arbitrary
     /// order. Iterator element type is &'b V.
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         unstable(feature = "forktable") )]
     pub fn values<'b>(&'b self) -> Values<'b, K, V> {
         self.table.values()
@@ -394,7 +394,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     ///
     /// Provides an iterator visiting all keys in arbitrary
     /// order. Iterator element type is &'b K.
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         unstable(feature = "forktable") )]
     pub fn keys<'b>(&'b self) -> Keys<'b, K, V>{
         self.table.keys()
@@ -412,19 +412,19 @@ impl<'a, K, V> ForkTable<'a, K, V>
 /// table.insert(1, "One");
 /// assert_eq!(table[&1], "One");
 /// ```
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     unstable(feature = "forktable") )]
 impl<'a, 'b, K, Q: ?Sized, V> ops::Index<&'b Q> for ForkTable<'a, K, V>
     where K: Eq + Hash,
           K: Borrow<Q>,
           Q: Eq + Hash
 {
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         unstable(feature = "forktable") )]
     type Output = V;
 
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         unstable(feature = "forktable") )]
     fn index(&self, index: &Q) -> &Self::Output {
         self.get(index)
@@ -445,14 +445,14 @@ impl<'a, 'b, K, Q: ?Sized, V> ops::Index<&'b Q> for ForkTable<'a, K, V>
 /// table[&1] = "one";
 /// assert_eq!(table[&1], "one")
 /// ```
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     unstable(feature = "forktable") )]
 impl<'a, 'b, K, Q: ?Sized, V> ops::IndexMut<&'b Q> for ForkTable<'a, K, V>
     where K: Eq + Hash + Borrow<Q>,
           Q: Eq + Hash
 {
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         unstable(feature = "forktable") )]
     fn index_mut(&mut self, index: &Q) -> &mut V {
         self.get_mut(index)
@@ -465,7 +465,7 @@ impl<'a, 'b, K, Q: ?Sized, V> ops::IndexMut<&'b Q> for ForkTable<'a, K, V>
 /// `ForkTable` mapping `&str` (names) to `(uint,uint)` tuples,
 /// representing the location in the `$e` stack storing the value
 /// bound to that name.
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "scope", since = "0.0.1") )]
 impl<'a> Scope<&'a str> for SymTable<'a> {
     /// Bind a name to a scope.
@@ -481,7 +481,7 @@ impl<'a> Scope<&'a str> for SymTable<'a> {
     ///
     /// A tuple containing the indexes for that name in the
     /// SVM environment (as `usize`).
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "scope", since = "0.0.1") )]
     fn bind(&mut self,name: &'a str, lvl: u64) -> Index {
         let idx = self.values()
@@ -502,7 +502,7 @@ impl<'a> Scope<&'a str> for SymTable<'a> {
     ///
     ///  + `Some(usize,usize)` if the name is bound in the symbol table
     ///  + `None` if the name is unbound
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "scope", since = "0.0.1") )]
     fn lookup(&self, name: &&'a str)            -> Option<Index> {
         self.get(name) // TODO: shouldn't usize be Copy?

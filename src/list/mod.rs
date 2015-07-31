@@ -20,7 +20,7 @@ use std::iter::{IntoIterator, FromIterator};
 /// # }
 /// ```
 #[macro_export]
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
 macro_rules! list(
     ( $e:expr, $($rest:expr),+ ) => ( Cons($e, Box::new(list!( $( $rest ),+ )) ));
@@ -32,18 +32,18 @@ macro_rules! list(
 mod tests;
 
 /// Common functions for an immutable Stack abstract data type.
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
 pub trait Stack<T> {
 
     /// Push an item to the top of the stack, returning a new stack
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn push(self, item : T) -> Self;
 
     /// Pop the top element of the stack. Returns an Option on a T and
     /// a new Stack<T> to replace this.
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn pop(self)            -> Option<(T, Self)>;
 
@@ -51,12 +51,12 @@ pub trait Stack<T> {
     ///
     /// Returns Some<T> if there is an item on top of the stack,
     /// and None if the stack is empty.
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn peek(&self)          -> Option<&T>;
 
     /// Returns an empty stack.
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn empty()              -> Self;
 }
@@ -78,7 +78,7 @@ impl<T> Stack<T> for List<T> {
     /// assert_eq!(s.peek(), Some(&6));
     /// ```
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn push(self, item: T) -> List<T> { Cons(item, Box::new(self)) }
 
@@ -102,7 +102,7 @@ impl<T> Stack<T> for List<T> {
     /// assert_eq!(pop_result.0, 1);
     /// ```
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn pop(self) -> Option<(T,List<T>)> {
         match self {
@@ -112,7 +112,7 @@ impl<T> Stack<T> for List<T> {
     }
 
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn empty() -> List<T> { Nil }
 
@@ -135,7 +135,7 @@ impl<T> Stack<T> for List<T> {
     /// assert_eq!(pop_result.0, 1);
     /// ```
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn peek(&self) -> Option<&T> {
         match self {
@@ -160,27 +160,27 @@ impl<T> Stack<T> for List<T> {
 // the performance benefits --- my guess is that caching is worth the added
 // costs (as usual).
 #[derive(PartialEq,Clone)]
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
 pub enum List<T> {
     /// Cons cell containing a `T` and a link to the tail
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     Cons(T, Box<List<T>>),
     /// The empty list.
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     Nil,
 }
 
 /// Public implementation for List.
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
 impl<T> List<T> {
 
 
     /// Creates a new empty list
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     #[inline]
     pub fn new() -> List<T> { Nil }
@@ -212,7 +212,7 @@ impl<T> List<T> {
     /// # }
     /// ```
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     pub fn prepend(self, it: T) -> List<T> { Cons(it, Box::new(self)) }
 
@@ -240,7 +240,7 @@ impl<T> List<T> {
     /// # }
     /// ```
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     pub fn append(&mut self, it: T) {
         match *self {
@@ -284,7 +284,7 @@ impl<T> List<T> {
     /// assert_eq!(a_list, list![1,2]);
     /// # }
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     pub fn append_chain(&mut self, it: T) -> &mut List<T> {
         match *self {
@@ -307,7 +307,7 @@ impl<T> List<T> {
     /// # }
     /// ```
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     pub fn length (&self) -> usize {
         match *self {
@@ -338,7 +338,7 @@ impl<T> List<T> {
     /// # }
     /// ```
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     pub fn is_empty (&self) -> bool {
         match *self {
@@ -360,7 +360,7 @@ impl<T> List<T> {
     /// # }
     /// ```
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     pub fn tail<'a>(&'a self) -> &'a Self {
         match self {
@@ -371,7 +371,7 @@ impl<T> List<T> {
 
     /// Provide a forward iterator
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     pub fn iter<'a>(&'a self) -> ListIterator<'a, T> {
         ListIterator{current: self}
@@ -390,7 +390,7 @@ impl<T> List<T> {
     /// # }
     /// ```
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     pub fn last(&self) -> &T {
         match *self {
@@ -429,7 +429,7 @@ impl<T> List<T> {
     /// assert_eq!(a_list.get(10), None);
     /// # }
     /// ```
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     pub fn get<'a>(&'a self, index: u64) -> Option<&'a T> {
         match (0..index).fold(self, |acc, _| acc.tail()) {
@@ -439,10 +439,10 @@ impl<T> List<T> {
 
     }
 }
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
 impl<'a, T> fmt::Display for List<T> where T: fmt::Display {
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut it = self.iter();
@@ -453,10 +453,10 @@ impl<'a, T> fmt::Display for List<T> where T: fmt::Display {
     }
 }
 
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
 impl<'a, T> fmt::Debug for List<T> where T: fmt::Debug {
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
@@ -468,7 +468,7 @@ impl<'a, T> fmt::Debug for List<T> where T: fmt::Debug {
 }
 
 
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
 impl<T> FromIterator<T> for List<T> {
     /// Build a `List<T>` from a structure implementing `IntoIterator<T>`.
@@ -489,7 +489,7 @@ impl<T> FromIterator<T> for List<T> {
     /// }
     /// ```
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn from_iter<I>(iterable: I) -> List<T> where I: IntoIterator<Item=T> {
             let mut result  = List::new();
@@ -502,13 +502,13 @@ impl<T> FromIterator<T> for List<T> {
 }
 
 /// Wraps a List<T> to allow it to be used as an Iterator<T>
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
 pub struct ListIterator<'a, T:'a> { current: &'a List<T> }
 
 /// Implementation of Iterator for List. This allows iteration by
 /// link hopping.
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
 impl<'a, T> Iterator for ListIterator<'a, T> {
     type Item = &'a T;
@@ -548,7 +548,7 @@ impl<'a, T> Iterator for ListIterator<'a, T> {
     /// # }
     /// ```
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn next(&mut self) -> Option<&'a T> {
         match self.current {
@@ -560,7 +560,7 @@ impl<'a, T> Iterator for ListIterator<'a, T> {
         }
     }
 }
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
 impl<'a, T> ExactSizeIterator for ListIterator<'a, T> {
     fn len(&self) -> usize {
@@ -580,15 +580,15 @@ impl<'a, T> ExactSizeIterator for ListIterator<'a, T> {
 /// assert_eq!(list[0usize], 1);
 /// # }
 /// ```
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "list", since = "0.1.0") )]
 impl<T> Index<usize> for List<T> {
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since = "0.1.0") )]
     type Output = T;
 
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn index<'a>(&'a self, _index: usize) -> &'a T {
         &self[_index as u64]
@@ -608,15 +608,15 @@ impl<T> Index<usize> for List<T> {
 /// assert_eq!(list[0usize], 1);
 /// # }
 /// ```
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "list", since = "0.1.0") )]
 impl<T> Index<u64> for List<T> {
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since = "0.1.0") )]
     type Output = T;
 
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since = "0.1.0") )]
     fn index<'a>(&'a self, _index: u64) -> &'a T {
         self.get(_index)
@@ -637,20 +637,20 @@ impl<T> Index<u64> for List<T> {
 /// assert_eq!(list[0isize], 1);
 /// # }
 /// ```
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature = "list", since = "0.1.0") )]
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     deprecated(since = "0.1.0", reason = "use unsigned indices instead") )]
 impl<T> Index<i64> for List<T> {
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since = "0.1.0") )]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         deprecated(since = "0.1.0", reason = "use unsigned indices instead") )]
     type Output = T;
 
     #[inline]
-    #[cfg_attr(feature = "nightly", stable(feature="list", since="0.1.0") )]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable", stable(feature="list", since="0.1.0") )]
+    #[cfg_attr(feature = "unstable",
         deprecated(since = "0.1.0", reason = "use unsigned indices instead") )]
     fn index<'a>(&'a self, _index: i64) -> &'a T {
         if _index < 0 {
@@ -673,21 +673,21 @@ impl<T> Index<i64> for List<T> {
 /// assert_eq!(list[0isize], 1);
 /// # }
 /// ```
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     stable(feature="list", since="0.1.0") )]
-#[cfg_attr(feature = "nightly",
+#[cfg_attr(feature = "unstable",
     deprecated(since="0.1.0", reason="use unsigned indices instead") )]
 impl<T> Index<isize> for List<T> {
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         deprecated(since = "0.1.0", reason = "use unsigned indices instead") )]
     type Output = T;
 
     #[inline]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
-    #[cfg_attr(feature = "nightly",
+    #[cfg_attr(feature = "unstable",
         deprecated(since = "0.2.0", reason = "use unsigned indices instead") )]
     fn index<'a>(&'a self, _index: isize) -> &'a T {
         if _index < 0 {

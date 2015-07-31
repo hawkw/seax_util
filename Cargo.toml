@@ -17,4 +17,4 @@ byteorder = "*"
 quickcheck = "*"
 
 [features]
-nightly = []
+unstable = []
