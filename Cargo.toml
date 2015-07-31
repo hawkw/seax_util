@@ -5,7 +5,7 @@ authors = ["Hawk Weisman <hi@hawkweisman.me>"]
 description = "General-purpose tools for compilers targeting the Seax platform."
 license = "MIT"
 homepage = "http://hawkweisman.me/seax"
-repository = "https://github.com/hawkw/seax_compiler_tools"
+repository = "https://github.com/hawkw/seax_util"
 readme = "README.md"
 keywords = ["vm","lisp","languages"]
 
