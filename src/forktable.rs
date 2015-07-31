@@ -66,7 +66,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// # Examples
     ///
     /// ```
-    /// # use seax_compiler_tools::forktable::ForkTable;
+    /// # use seax_util::forktable::ForkTable;
     /// let mut table: ForkTable<isize,&str> = ForkTable::new();
     /// assert_eq!(table.get(&1), None);
     /// table.insert(1, "One");
@@ -74,7 +74,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// assert_eq!(table.get(&2), None);
     /// ```
     /// ```
-    /// # use seax_compiler_tools::forktable::ForkTable;
+    /// # use seax_util::forktable::ForkTable;
     /// let mut level_1: ForkTable<isize,&str> = ForkTable::new();
     /// level_1.insert(1, "One");
     ///
@@ -124,7 +124,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// # Examples
     ///
     /// ```
-    /// # use seax_compiler_tools::forktable::ForkTable;
+    /// # use seax_util::forktable::ForkTable;
     /// let mut table: ForkTable<isize,&str> = ForkTable::new();
     /// assert_eq!(table.get_mut(&1), None);
     /// table.insert(1isize, "One");
@@ -132,7 +132,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// assert_eq!(table.get_mut(&2), None);
     /// ```
     /// ```
-    /// # use seax_compiler_tools::forktable::ForkTable;
+    /// # use seax_util::forktable::ForkTable;
     /// let mut level_1: ForkTable<isize,&str> = ForkTable::new();
     /// level_1.insert(1, "One");
     ///
@@ -175,7 +175,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     ///
     /// # Examples
     /// ```
-    /// # use seax_compiler_tools::forktable::ForkTable;
+    /// # use seax_util::forktable::ForkTable;
     /// let mut table: ForkTable<isize,&str> = ForkTable::new();
     /// table.insert(1, "One");
     ///
@@ -183,7 +183,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// assert_eq!(table.contains_key(&1), false);
     /// ```
     /// ```
-    /// # use seax_compiler_tools::forktable::ForkTable;
+    /// # use seax_util::forktable::ForkTable;
     /// let mut level_1: ForkTable<isize,&str> = ForkTable::new();
     /// level_1.insert(1, "One");
     /// assert_eq!(level_1.contains_key(&1), true);
@@ -235,7 +235,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// Simply inserting an entry:
     ///
     /// ```
-    /// # use seax_compiler_tools::forktable::ForkTable;
+    /// # use seax_util::forktable::ForkTable;
     /// let mut table: ForkTable<isize,&str> = ForkTable::new();
     /// assert_eq!(table.get(&1), None);
     /// table.insert(1, "One");
@@ -245,7 +245,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     /// Overwriting the value associated with a key:
     ///
     /// ```
-    /// # use seax_compiler_tools::forktable::ForkTable;
+    /// # use seax_util::forktable::ForkTable;
     /// let mut table: ForkTable<isize,&str> = ForkTable::new();
     /// assert_eq!(table.get(&1), None);
     /// assert_eq!(table.insert(1, "one"), None);
@@ -281,14 +281,14 @@ impl<'a, K, V> ForkTable<'a, K, V>
     ///
     /// # Examples
     /// ```
-    /// # use seax_compiler_tools::forktable::ForkTable;
+    /// # use seax_util::forktable::ForkTable;
     /// let mut table: ForkTable<isize,&str> = ForkTable::new();
     /// assert_eq!(table.contains_key(&1), false);
     /// table.insert(1, "One");
     /// assert_eq!(table.contains_key(&1), true);
     /// ```
     /// ```
-    /// # use seax_compiler_tools::forktable::ForkTable;
+    /// # use seax_util::forktable::ForkTable;
     /// let mut level_1: ForkTable<isize,&str> = ForkTable::new();
     /// assert_eq!(level_1.contains_key(&1), false);
     /// level_1.insert(1, "One");
@@ -326,14 +326,14 @@ impl<'a, K, V> ForkTable<'a, K, V>
     ///
     /// # Examples
     /// ```
-    /// # use seax_compiler_tools::forktable::ForkTable;
+    /// # use seax_util::forktable::ForkTable;
     /// let mut table: ForkTable<isize,&str> = ForkTable::new();
     /// assert_eq!(table.chain_contains_key(&1), false);
     /// table.insert(1, "One");
     /// assert_eq!(table.chain_contains_key(&1), true);
     /// ```
     /// ```
-    /// # use seax_compiler_tools::forktable::ForkTable;
+    /// # use seax_util::forktable::ForkTable;
     /// let mut level_1: ForkTable<isize,&str> = ForkTable::new();
     /// assert_eq!(level_1.chain_contains_key(&1), false);
     /// level_1.insert(1, "One");
@@ -415,7 +415,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
 ///
 /// ```
 /// # #![feature(forktable)]
-/// # use seax_compiler_tools::forktable::ForkTable;
+/// # use seax_util::forktable::ForkTable;
 /// let mut table: ForkTable<isize,&str> = ForkTable::new();
 /// table.insert(1, "One");
 /// assert_eq!(table[&1], "One");
@@ -444,7 +444,7 @@ impl<'a, 'b, K, Q: ?Sized, V> ops::Index<&'b Q> for ForkTable<'a, K, V>
 ///
 /// ```
 /// # #![feature(forktable)]
-/// # use seax_compiler_tools::forktable::ForkTable;
+/// # use seax_util::forktable::ForkTable;
 /// let mut table: ForkTable<isize,&str> = ForkTable::new();
 /// table.insert(1, "One");
 /// table[&1] = "one";

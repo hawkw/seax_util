@@ -1,5 +1,5 @@
 [package]
-name = "seax_compiler_tools"
+name = "seax_util"
 version = "0.0.1"
 authors = ["Hawk Weisman <hi@hawkweisman.me>"]
 description = "General-purpose tools for compilers targeting the Seax platform."
@@ -10,7 +10,11 @@ readme = "README.md"
 keywords = ["vm","lisp","languages"]
 
 [dependencies]
-seax_svm = "^0.2.8"
+log = "0.3.1"
+byteorder = "*"
+
+[dev-dependencies]
+quickcheck = "*"
 
 [features]
 nightly = []
