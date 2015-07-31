@@ -4,10 +4,11 @@ rust:
   - nightly
   - beta
   - stable
-allow_failures:
-  - rust: beta
-  - rust: stable
-fast_finish: true
+matrix:
+  allow_failures:
+    - rust: beta
+    - rust: stable
+  fast_finish: true
 addons:
   apt:
     packages:
