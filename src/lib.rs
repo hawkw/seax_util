@@ -53,7 +53,7 @@ pub mod bytecode;
 /// Contains general-purpose code for compilers targeting the Seax platform.
 #[cfg_attr(feature = "nightly",
     stable(feature = "compile", since = "0.0.1") )]
-pub mod bytecode;
+pub mod compiler_tools;
 
 // Reexports
 pub use self::list::{List, Stack};
