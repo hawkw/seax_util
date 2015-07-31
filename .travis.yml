@@ -1,14 +1,13 @@
 sudo: false
 language: rust
-matrix:
-  rust:
-    - nightly
-    - beta
-    - stable
-  allow_failures:
-    - rust: beta
-    - rust: stable
-  fast_finish: true
+rust:
+  - nightly
+  - beta
+  - stable
+allow_failures:
+  - rust: beta
+  - rust: stable
+fast_finish: true
 addons:
   apt:
     packages:
