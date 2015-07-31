@@ -226,7 +226,6 @@ impl<T> List<T> {
     ///
     /// # Examples
     /// ```
-    /// # #![feature(list)]
     /// # #[macro_use] extern crate seax_util;
     /// # use seax_util::list::List;
     /// # use seax_util::list::List::{Cons,Nil};
@@ -268,7 +267,6 @@ impl<T> List<T> {
     ///
     /// # Examples
     /// ```
-    /// # #![feature(list)]
     /// # #[macro_use] extern crate seax_util;
     /// # use seax_util::list::List;
     /// # use seax_util::list::List::{Cons,Nil};
@@ -533,18 +531,18 @@ impl<'a, T> Iterator for ListIterator<'a, T> {
     /// # }
     /// ```
     /// ```
-    /// # #![feature(convert)]
     /// # #[macro_use] extern crate seax_util;
     /// # use seax_util::list;
     /// # use seax_util::list::List;
     /// # use seax_util::list::List::{Cons, Nil};
+    /// # use std::fmt::Write;
     /// # fn main () {
     /// let l: List<isize> = list!(1,2,3,4,5,6);
     /// let mut string = String::new();
     /// for item in l.iter() {
-    ///     string.push_str((item.to_string() + ", ").as_ref());
+    ///     write!(string, "{}, ", item).unwrap();
     /// }
-    /// assert_eq!(string, "1, 2, 3, 4, 5, 6, ".to_string())
+    /// assert_eq!(string, String::from("1, 2, 3, 4, 5, 6, "))
     /// # }
     /// ```
     #[inline]
