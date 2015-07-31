@@ -1,4 +1,4 @@
-# Seax Compiler Tools
+# Seax Utilities
 
 [![Join the chat at https://gitter.im/hawkw/seax](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hawkw/seax?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -9,7 +9,13 @@
 [![Latest release](https://img.shields.io/crates/v/seax_compiler_tools.svg?style=flat-square)](https://crates.io/crates/seax_svm)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/hawkw/seax/LICENSE)
 
-General purpose bits for compilers targeting the Seax platform
+Utility code for building other Seax platform libraries.
+
+This crate contains the following modules:
+ + `cell`: Contains the definitions of all Seax Virtual Machine cell types, including instruction, atom, and list cells
+ + `list`: Contains the singly-linked list and stack implementations used by the Seax VM internally
+ + `bytecode`: Contains functions for encoding and decoding Seax VM cells to and from Bytecode
+ + `compiler_tools`: Contains reusable code for implementing compilers targeting Seax, including traits for abstract syntax nodes and symbol tables.
 
 Contributing
 ------------
