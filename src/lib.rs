@@ -5,11 +5,24 @@
 #![cfg_attr(feature = "nightly", staged_api)]
 #![cfg_attr(feature = "nightly", stable(feature = "util", since = "0.0.1"))]
 
-//! Seax Compiler Tools
-//! -------------------
+//! Seax Utilities
+//! --------------
 //!
-//! Library containing general-purpose tools for compiling programs for
-//! the [Seax](hawkweisman.me/seax) platform.
+//! Utility library containing code for building programs involving the
+//! [Seax](hawkweisman.me/seax) platform. Seax is a virtual-machine-based
+//! runtime environment for functional programming languages.
+//!
+//! This crate contains the following modules:
+//!
+//! + `cell`: Contains the definitions of all Seax Virtual Machine cell types,
+//!   including instruction, atom, and list cells.
+//! + `list`: Contains the singly-linked list and stack implementations used
+//!   by the Seax VM internally.
+//! + `bytecode`: Contains functions for encoding and decoding Seax VM cells
+//!   to and from Seax bytecode
+//! + `compiler_tools`: Contains reusable code for implementing compilers
+//!   targeting the Seax platform, including traits for abstract syntax trees
+//!   and symbol tables.
 
 #[macro_use] extern crate log;
 #[cfg(test)] extern crate quickcheck;
