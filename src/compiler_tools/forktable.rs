@@ -406,7 +406,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
 /// This is just a wrapper for `get(&key)`
 ///
 /// ```
-/// # #![feature(forktable)]
+/// # #![cfg_attr(feature = "unstable", feature(forktable))]
 /// # use seax_util::compiler_tools::ForkTable;
 /// let mut table: ForkTable<isize,&str> = ForkTable::new();
 /// table.insert(1, "One");
@@ -438,7 +438,7 @@ impl<'a, 'b, K, Q: ?Sized, V> ops::Index<&'b Q> for ForkTable<'a, K, V>
 /// This is just a wrapper for `get_mut(&key)`
 ///
 /// ```
-/// # #![feature(forktable)]
+/// # #![cfg_attr(feature = "unstable", feature(forktable))]
 /// # use seax_util::compiler_tools::ForkTable;
 /// let mut table: ForkTable<isize,&str> = ForkTable::new();
 /// table.insert(1, "One");
