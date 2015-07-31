@@ -154,10 +154,13 @@ macro_rules! push_all {
     ( $vec:ident, $other:expr ) => { $vec.push_all($other); }
 }
 
-/// exported constants
-#[cfg_attr(feature = "nightly", stable(feature="decode", since="0.3.0"))]
+/// Identifying bytes for a Seax bytecode file
+#[cfg_attr(feature = "nightly",
+    stable(feature = "decode", since = "0.1.0") )]
 pub const IDENT_BYTES: u16 = 0x5ECD;
-#[cfg_attr(feature = "nightly", stable(feature="decode", since="0.3.0"))]
+/// Identifying bytes for this version of the Seax bytecode standard.
+#[cfg_attr(feature = "nightly",
+    stable(feature = "decode", since="0.3.0") )]
 pub const VERSION: u16     = 0x0000;
 
 /// block reserved for future opcodes
@@ -170,7 +173,11 @@ const CONST_LEN: u8       = 0x0E;
 const BYTE_CONS: u8       = 0xC0;
 const BYTE_NIL: u8        = 0x00;
 
-#[cfg_attr(feature = "nightly", unstable(feature = "decode"))]
+/// Decode a whole program
+///
+/// Decodes a whole program, including the identifying and version bytes.
+#[cfg_attr(feature = "nightly",
+    unstable(feature = "decode") )]
 pub fn decode_program<R>(source: &mut R) -> Result<List<SVMCell>, String>
     where R: Read
 {
@@ -180,16 +187,22 @@ pub fn decode_program<R>(source: &mut R) -> Result<List<SVMCell>, String>
         .map(|_| decoder.check_version()
                         .map_err(|why| warn!("{}", why) )
             )
-        .map(|_| decoder.collect::<List<SVMCell>>() )
+        .map(|_| // TODO: carry over errors from next_cell()
+                 // rather than upwrapping
+            decoder.collect::<List<SVMCell>>()
+            )
 }
 
-#[cfg_attr(feature = "nightly", stable(feature="decode", since="0.2.6"))]
+#[cfg_attr(feature = "nightly",
+    stable(feature = "decode", since="0.1.0"))]
 pub struct Decoder<'a, R: 'a> {
     source: &'a mut R,
     num_read: usize
 }
 
-#[cfg_attr(feature = "nightly", stable(feature="decode", since="0.2.6"))]
+/// Decode a Seax instruction from a byte
+#[cfg_attr(feature = "nightly",
+    stable(feature = "decode", since="0.1.0"))]
 fn decode_inst(byte: &u8) -> Result<Inst, String> {
     match *byte {
         BYTE_NIL => Ok(NIL),
@@ -232,11 +245,21 @@ fn decode_inst(byte: &u8) -> Result<Inst, String> {
 }
 
 
-#[cfg_attr(feature = "nightly", stable(feature="decode", since="0.2.6"))]
+#[cfg_attr(feature = "nightly",
+    stable(feature = "decode", since="0.1.0"))]
 impl<'a, R> Decoder<'a, R>
     where R: Read
 {
-    #[cfg_attr(feature = "nightly", stable(feature="decode", since="0.3.0"))]
+    /// Check the identifying bytes
+    ///
+    /// The two-byte sequence `0x5ECD` is expected at the beginning of all
+    /// Seax bytecode files. Those bytes identify that file as a Seax bytecode
+    /// file. If the bytes don't match, an error is returned, as the file is
+    /// invalid.
+    ///
+    /// Consumes two bytes.
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "decode", since="0.1.0"))]
     pub fn check_ident_bytes(&mut self) -> Result<(), String> {
         self.source
             .read_u16::<BigEndian>()
@@ -252,7 +275,15 @@ impl<'a, R> Decoder<'a, R>
             })
     }
 
-    #[cfg_attr(feature = "nightly", stable(feature="decode", since="0.3.0"))]
+    /// Checks the version bytes
+    ///
+    /// Checks the version bytes of a Seax bytecode file against the VERSION
+    /// of the bytecode standard used by this code. If the versions are not
+    /// the same, an error is returned.
+    ///
+    /// Consumes two bytes.
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "decode", since="0.1.0") )]
     pub fn check_version(&mut self) -> Result<(), String> {
         self.source
             .read_u16::<BigEndian>()
@@ -270,7 +301,9 @@ impl<'a, R> Decoder<'a, R>
             })
     }
 
-    #[cfg_attr(feature = "nightly", stable(feature="decode", since="0.2.6"))]
+    /// Creates a new decoder from a type implementing `std::io::Read`
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "decode", since="0.1.0") )]
     pub fn new(src: &'a mut R) -> Decoder<'a, R> {
         Decoder {
             source: src,
@@ -279,12 +312,23 @@ impl<'a, R> Decoder<'a, R>
     }
 
     /// Returns the number of bytes read by the decoder
-    #[cfg_attr(feature = "nightly", stable(feature="decode", since="0.2.6"))]
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "decode", since="0.1.0") )]
     pub fn num_read(&self) -> usize {
         self.num_read
     }
 
-    #[cfg_attr(feature = "nightly", stable(feature="decode", since="0.2.6"))]
+    /// Decode a constant
+    ///
+    /// This method is passed a constant-identifying byte. It extracts
+    /// the type tag from that byte, and then consumes the appropriate
+    /// number of bytes from the reader and decodes them to the
+    /// expected constant.
+    ///
+    /// Consums a varying number of bytes depending on the constant being
+    /// decoded.
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "decode", since="0.1.0") )]
     fn decode_const(&mut self, byte: &u8) -> Result<Atom, String> {
         match *byte & 0x0F { // extract the type tag
             1 => {
@@ -323,7 +367,10 @@ impl<'a, R> Decoder<'a, R>
         }
     }
     // Decodes a CONS cell
-    #[cfg_attr(feature = "nightly", stable(feature="decode", since="0.2.6"))]
+    //
+    // Consumes a varying number of bytes depending on the length of the list.
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "decode", since="0.1.0") )]
     fn decode_cons(&mut self) -> Result<Option<Box<List<SVMCell>>>, String> {
         self.next_cell()
             .and_then(|car|
@@ -354,7 +401,8 @@ impl<'a, R> Decoder<'a, R>
     }
 
     /// Decodes the next cell in the source
-    #[cfg_attr(feature = "nightly", stable(feature="decode", since="0.2.6"))]
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "decode", since="0.1.0") )]
     pub fn next_cell(&mut self) -> Result<Option<SVMCell>,String> {
         let mut buf = [0;1];
         match self.source.read(&mut buf) {
@@ -385,20 +433,25 @@ impl<'a, R> Decoder<'a, R>
 
 }
 
-#[cfg_attr(feature = "nightly", stable(feature="decode", since="0.2.6"))]
+#[cfg_attr(feature = "nightly",
+    stable(feature = "decode", since="0.1.0") )]
 impl<'a, R> Iterator for Decoder<'a, R> where R: Read {
-    #[cfg_attr(feature = "nightly", stable(feature="decode", since="0.2.6"))]
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "decode", since="0.1.0") )]
     type Item = SVMCell;
 
-    #[cfg_attr(feature = "nightly", stable(feature="decode", since="0.2.6"))]
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "decode", since="0.1.0") )]
     fn next(&mut self) -> Option<SVMCell> {
         self.next_cell()
             .unwrap()
     }
 }
-#[cfg_attr(feature = "nightly", stable(feature="decode", since="0.2.6"))]
+#[cfg_attr(feature = "nightly",
+    stable(feature = "decode", since="0.1.0") )]
 impl<'a, R> fmt::Debug for Decoder<'a, R>  where R: fmt::Debug {
-    #[cfg_attr(feature = "nightly", stable(feature="decode", since="0.2.6"))]
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "decode", since="0.1.0") )]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Decoding from: {:?}, {} bytes read",
             self.source,
@@ -408,15 +461,22 @@ impl<'a, R> fmt::Debug for Decoder<'a, R>  where R: fmt::Debug {
 
 }
 
-#[cfg_attr(feature = "nightly", stable(feature="encode", since="0.2.6"))]
+/// Trait for an object that can be encoded to Seax bytecode.
+///
+/// All types that can be encoded must implement this.
+#[cfg_attr(feature = "nightly",
+    stable(feature = "encode", since="0.1.0") )]
 pub trait Encode {
-    #[cfg_attr(feature = "nightly", stable(feature="encode", since="0.2.6"))]
+    /// Encodes this object to a list of bytes.
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "encode", since="0.1.0") )]
     fn emit(&self) -> Vec<u8>;
 }
-
-#[cfg_attr(feature = "nightly", stable(feature="encode", since="0.2.6"))]
+#[cfg_attr(feature = "nightly",
+    stable(feature = "encode", since="0.1.0") )]
 impl Encode for SVMCell {
-    #[cfg_attr(feature = "nightly", stable(feature="encode", since="0.2.6"))]
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "encode", since="0.1.0") )]
     fn emit(&self) -> Vec<u8> {
         match *self {
             AtomCell(ref atom) => atom.emit(),
@@ -426,9 +486,11 @@ impl Encode for SVMCell {
     }
 }
 
-#[cfg_attr(feature = "nightly", stable(feature="encode", since="0.2.6"))]
+#[cfg_attr(feature = "nightly",
+    stable(feature = "encode", since="0.1.0") )]
 impl Encode for Atom {
-    #[cfg_attr(feature = "nightly", stable(feature="encode", since="0.2.6"))]
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "encode", since="0.1.0") )]
     fn emit(&self) -> Vec<u8> {
         match *self {
             UInt(value) => {
@@ -459,9 +521,11 @@ impl Encode for Atom {
     }
 }
 
-#[cfg_attr(feature = "nightly", stable(feature="encode", since="0.2.6"))]
+#[cfg_attr(feature = "nightly",
+    stable(feature = "encode", since="0.1.0") )]
 impl Encode for Inst {
-    #[cfg_attr(feature = "nightly", stable(feature="encode", since="0.2.6"))]
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "encode", since="0.1.0") )]
     fn emit(&self) -> Vec<u8> {
         match *self {
             NIL     => vec![BYTE_NIL],
@@ -498,9 +562,11 @@ impl Encode for Inst {
     }
 }
 
-#[cfg_attr(feature = "nightly", stable(feature="encode", since="0.2.6"))]
+#[cfg_attr(feature = "nightly",
+    stable(feature = "encode", since="0.1.0") )]
 impl<T> Encode for List<T> where T: Encode {
-    #[cfg_attr(feature = "nightly", stable(feature="encode", since="0.2.6"))]
+    #[cfg_attr(feature = "nightly",
+        stable(feature = "encode", since="0.1.0") )]
     fn emit(&self) -> Vec<u8> {
         match *self {
             Cons(ref it, ref tail) => {
