@@ -21,6 +21,17 @@ pub mod forktable;
     stable(feature = "ast", since = "0.0.1") )]
 pub mod ast;
 
+/// Location
+/// --------
+///
+/// Code for annotating AST nodes with source code locations. This is based
+/// loosely on ideas from code written by Markus Westerlind for the Embed
+/// programming language
+/// (https://github.com/Marwes/embed_lang/blob/master/base/src/ast.rs#L99).
+#[cfg_attr(feature = "unstable",
+    unstable(feature = "location") )]
+pub mod location;
+
 // Reexports
 pub use self::forktable::ForkTable;
 pub use self::ast::ASTNode;
