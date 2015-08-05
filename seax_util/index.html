@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `seax_util` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, seax_util">
+
+    <title>seax_util - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'seax_util', ty: 'mod', relpath: '../'};</script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>seax_util</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-0' class='srclink' href='../src/seax_util/lib.rs.html#1-74' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'>
+<h2 id="seax-utilities" class='section-header'><a
+                           href="#seax-utilities">Seax Utilities</a></h2>
+<p>Utility library containing code for building programs involving the
+<a href="hawkweisman.me/seax">Seax</a> platform. Seax is a virtual-machine-based
+runtime environment for functional programming languages.</p>
+
+<p>This crate contains the following modules:</p>
+
+<ul>
+<li><code>cell</code>: Contains the definitions of all Seax Virtual Machine cell types,
+including instruction, atom, and list cells.</li>
+<li><code>list</code>: Contains the singly-linked list and stack implementations used
+by the Seax VM internally.</li>
+<li><code>bytecode</code>: Contains functions for encoding and decoding Seax VM cells
+to and from Seax bytecode</li>
+<li><code>compiler_tools</code>: Contains reusable code for implementing compilers
+targeting the Seax platform, including traits for abstract syntax trees
+and symbol tables.</li>
+</ul>
+</div><h2 id='reexports' class='section-header'><a href="#reexports">Reexports</a></h2>
+<table><tr><td><code>pub use self::list::{<a class='enum' href='../seax_util/list/enum.List.html' title='seax_util::list::List'>List</a>, <a class='trait' href='../seax_util/list/trait.Stack.html' title='seax_util::list::Stack'>Stack</a>};</code></td></tr><tr><td><code>pub use self::list::List::{<a class='enum' href='../seax_util/list/enum.List.html' title='seax_util::list::List'>Cons</a>, <a class='enum' href='../seax_util/list/enum.List.html' title='seax_util::list::List'>Nil</a>};</code></td></tr><tr><td><code>pub use self::cell::{<a class='enum' href='../seax_util/cell/enum.SVMCell.html' title='seax_util::cell::SVMCell'>SVMCell</a>, <a class='enum' href='../seax_util/cell/enum.Atom.html' title='seax_util::cell::Atom'>Atom</a>, <a class='enum' href='../seax_util/cell/enum.Inst.html' title='seax_util::cell::Inst'>Inst</a>};</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='bytecode/index.html'
+                               title='seax_util::bytecode'>bytecode</a></td>
+                        <td class='docblock short'>
+                             
+<h2 id="bytecode" class='section-header'><a
+                           href="#bytecode">Bytecode</a></h2>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='cell/index.html'
+                               title='seax_util::cell'>cell</a></td>
+                        <td class='docblock short'>
+                             
+<h2 id="cell" class='section-header'><a
+                           href="#cell">Cell</a></h2>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='compiler_tools/index.html'
+                               title='seax_util::compiler_tools'>compiler_tools</a></td>
+                        <td class='docblock short'>
+                             
+<h2 id="compiler-tools" class='section-header'><a
+                           href="#compiler-tools">Compiler Tools</a></h2>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='list/index.html'
+                               title='seax_util::list'>list</a></td>
+                        <td class='docblock short'>
+                             
+<h2 id="list" class='section-header'><a
+                           href="#list">List</a></h2>
+                        </td>
+                    </tr>
+                </table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='macro' href='macro.list!.html'
+                               title='seax_util::list!'>list!</a></td>
+                        <td class='docblock short'>
+                             <p>Convenience macro for making lists.</p>
+
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='macro' href='macro.list_cell!.html'
+                               title='seax_util::list_cell!'>list_cell!</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                </table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard Shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search Tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "seax_util";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>

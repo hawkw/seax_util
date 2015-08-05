@@ -1,1 +1,0 @@
-initSidebarItems({"trait":[["ASTNode","Trait for AST nodes."]]});

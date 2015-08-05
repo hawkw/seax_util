@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["IDENT_BYTES","Identifying bytes for a Seax bytecode file"],["VERSION","Identifying bytes for this version of the Seax bytecode standard."]],"fn":[["decode_program","Decode a whole program"]],"struct":[["Decoder",""]],"trait":[["Encode","Trait for an object that can be encoded to Seax bytecode."]]});

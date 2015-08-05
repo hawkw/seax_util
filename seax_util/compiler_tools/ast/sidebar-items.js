@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["INDENT","Width of one indentation level"]],"trait":[["ASTNode","Trait for AST nodes."]]});

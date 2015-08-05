@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["Decoder",""]],"trait":[["Encode",""]]});

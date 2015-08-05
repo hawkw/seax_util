@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["IOEvent","A VM state's IO action"]],"fn":[["eval_program","Evaluates a program."]],"macro":[["list!","Convenience macro for making lists."]],"mod":[["bytecode","Bytecode ========"],["cell","SVM cell types."],["slist","Singly-linked list and stack implementations."]],"struct":[["State","Represents a SVM machine state"]],"type":[["EvalResult",""]]});

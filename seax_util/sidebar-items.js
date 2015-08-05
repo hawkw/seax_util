@@ -1,0 +1,1 @@
+initSidebarItems({"macro":[["list!","Convenience macro for making lists."],["list_cell!",""]],"mod":[["bytecode","Bytecode --------"],["cell","Cell ----"],["compiler_tools","Compiler Tools --------------"],["list","List ----"]]});

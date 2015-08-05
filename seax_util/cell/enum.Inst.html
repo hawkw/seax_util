@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Inst` enum in crate `seax_util`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Inst">
+
+    <title>seax_util::cell::Inst - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='../index.html'>seax_util</a>::<wbr><a href='index.html'>cell</a></p><script>window.sidebarCurrent = {name: 'Inst', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content enum">
+<h1 class='fqn'><span class='in-band'>Enum <a href='../index.html'>seax_util</a>::<wbr><a href='index.html'>cell</a>::<wbr><a class='enum' href=''>Inst</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-4357' class='srclink' href='../../src/seax_util/cell/mod.rs.html#303-549' title='goto source code'>[src]</a></span></h1>
+<pre class='rust enum'>pub enum Inst {
+    NIL,
+    LDC,
+    LD,
+    LDF,
+    JOIN,
+    AP,
+    RET,
+    DUM,
+    RAP,
+    SEL,
+    ADD,
+    SUB,
+    MUL,
+    DIV,
+    FDIV,
+    MOD,
+    EQ,
+    GT,
+    GTE,
+    LT,
+    LTE,
+    ATOM,
+    CAR,
+    CDR,
+    CONS,
+    NULL,
+    STOP,
+    READC,
+    WRITEC,
+    APCC,
+}</pre><div class='docblock'><p>SVM instruction types.</p>
+
+<p>Each SVM instruction will be described using operational
+semantics through the use of the following notation:</p>
+
+<ul>
+<li>a state is written <code>(s, e, c, d)</code></li>
+<li><code>(x.y)</code> is <code>Cons(x, y)</code>. The empty list is <code>nil</code>.</li>
+<li>each instruction is described as a state transition <code>(s, e, c, d) → (s´, e´, c´, d´)</code></li>
+</ul>
+</div><h2 class='variants'>Variants</h2>
+<table><tr><td id='variant.NIL'><code>NIL</code></td><td><div class='docblock'><p><code>nil</code></p>
+
+<p>Pushes an empty list (nil) onto the stack.</p>
+
+<p><strong>Operational semantics</strong>: <code>(s, e, (NIL.c), d) → ( (nil.s), e, c, d )</code></p>
+</div></td></tr><tr><td id='variant.LDC'><code>LDC</code></td><td><div class='docblock'><p><code>ldc</code>: <code>L</code>oa<code>d</code> <code>C</code>onstant. Loads a constant (atom)</p>
+</div></td></tr><tr><td id='variant.LD'><code>LD</code></td><td><div class='docblock'><p><code>ld</code>: <code>L</code>oa<code>d</code>. Pushes a variable onto the stack.</p>
+
+<p>The variable is indicated by the argument, a pair.
+The pair&#39;s <code>car</code> specifies the level, the <code>cdr</code> the position.
+So <code>(1 . 3)</code> gives the current function&#39;s (level 1) third
+parameter.</p>
+
+<p><strong>Operational semantics</strong>: <code>(s, e, LDC.v.c, d) → (v.s, e, c, d)</code></p>
+</div></td></tr><tr><td id='variant.LDF'><code>LDF</code></td><td><div class='docblock'><p><code>ldf</code>: <code>L</code>oa<code>d</code> <code>F</code>unction.</p>
+
+<p>Takes one list argument representing a function and constructs
+ a closure (a pair containing the function and the current
+ environment) and pushes that onto the stack.</p>
+
+<p><em>Operational semantics</em>: <code>(s, e, (LDF f.c), d) → ( ([f e].s), e, c, d)</code></p>
+</div></td></tr><tr><td id='variant.JOIN'><code>JOIN</code></td><td><div class='docblock'><p><code>join</code></p>
+
+<p>Pops a list reference from the dump and makes thi64 the new value
+of <code>C</code>. This instruction occurs at the end of both alternatives of
+ a <code>sel</code>.</p>
+
+<p><strong>Operational semantics</strong>: <code>(s, e, JOIN.c, c´.d) → (s, e, c´, d)</code></p>
+</div></td></tr><tr><td id='variant.AP'><code>AP</code></td><td><div class='docblock'><p><code>ap</code>: <code>Ap</code>ply.</p>
+
+<p>Pops a closure and a list of parameter values from the stack.
+The closure is applied to the parameters by installing its
+environment as the current one, pushing the parameter list
+in front of that, clearing the stack, and setting <code>c</code> to the
+closure&#39;s function pointer. The previous values of <code>s</code>, <code>e</code>,
+ and the next value of <code>c</code> are saved on the dump.</p>
+
+<p><strong>Operational semantics</strong>: <code>(([f e´] v.s), e, (AP.c), d) → (nil, (v.e&amp;prime), f, (s e c.d))</code></p>
+</div></td></tr><tr><td id='variant.RET'><code>RET</code></td><td><div class='docblock'><p><code>ret</code>: <code>Ret</code>urn.</p>
+
+<p>Pops one return value from the stack, restores
+<code>$s</code>, <code>$e</code>, and <code>$c</code> from the dump, and pushes
+the return value onto the now-current stack.</p>
+</div></td></tr><tr><td id='variant.DUM'><code>DUM</code></td><td><div class='docblock'><p><code>dum</code>: <code>Dum</code>my.</p>
+
+<p>Pops a dummy environment (an empty list) onto the <code>$e</code> stack.</p>
+</div></td></tr><tr><td id='variant.RAP'><code>RAP</code></td><td><div class='docblock'><p><code>rap</code>: <code>R</code>ecursive <code>Ap</code>ply.
+Works like <code>ap</code>, only that it replaces an occurrence of a
+dummy environment with the current one, thus making recursive
+ functions possible.</p>
+</div></td></tr><tr><td id='variant.SEL'><code>SEL</code></td><td><div class='docblock'><p><code>sel</code>: <code>Sel</code>ect branch</p>
+
+<p>Expects two list arguments on the control stack, and pops a value
+from the stack. The first list is executed if the popped value
+was non-nil, the second list otherwise. Before one of these list
+pointers is made the new <code>$c</code>, a pointer to the instruction
+following <code>sel</code> is saved on the dump.</p>
+
+<p><strong>Operational semantics</strong>: <code>(v.s, e, SEL.true.false.c, d) → (s, e, (if v then true else false), c.d)</code></p>
+</div></td></tr><tr><td id='variant.ADD'><code>ADD</code></td><td><div class='docblock'><p><code>add</code></p>
+
+<p>Pops two numbers off of the stack and adds them, pu64hing the
+result onto the stack. This will up-convert integers to floating
+point if necessary.</p>
+
+<p>TODO: figure out what happens when you try to add things that aren&#39;t
+numbers (maybe the compiler won&#39;t let this happen?).</p>
+</div></td></tr><tr><td id='variant.SUB'><code>SUB</code></td><td><div class='docblock'><p><code>sub</code>: <code>Sub</code>tract</p>
+
+<p>Pops two numbers off of the stack and subtracts the first from the
+second, pu64hing the result onto the stack. This will up-convert
+integers to floating point if necessary.</p>
+
+<p>TODO: figure out what happens when you try to subtract things that
+aren&#39;t numbers (maybe the compiler won&#39;t let thi64 happen?).</p>
+</div></td></tr><tr><td id='variant.MUL'><code>MUL</code></td><td><div class='docblock'><p><code>mul</code>: <code>Mul</code>tiply</p>
+
+<p>Pops two numbers off of the stack and multiplies them, pu64hing the
+result onto the stack. This will up-convert integers to floating
+point if necessary.</p>
+
+<p>TODO: figure out what happens when you try to multiply things that
+aren&#39;t numbers (maybe the compiler won&#39;t let thi64 happen?).</p>
+</div></td></tr><tr><td id='variant.DIV'><code>DIV</code></td><td><div class='docblock'><p><code>div</code>: <code>Div</code>ide</p>
+
+<p>Pops two numbers off of the stack and divides the first by the second,
+pushing the result onto the stack. This performs integer divi64ion.</p>
+
+<p>TODO: figure out what happens when you try to divide things that
+aren&#39;t numbers (maybe the compiler won&#39;t let thi64 happen?).</p>
+</div></td></tr><tr><td id='variant.FDIV'><code>FDIV</code></td><td><div class='docblock'><p><code>fdiv</code>: <code>F</code>loating-point <code>div</code>ide</p>
+
+<p>Pops two numbers off of the stack and divides the first by the second,
+pu64hing the result onto the stack. This performs float divi64ion.</p>
+
+<p>TODO: figure out what happens when you try to divide things that
+aren&#39;t numbers (maybe the compiler won&#39;t let this happen?).</p>
+
+<p>TODO: Not sure if there should be separate float and int divide words
+I guess the compiler can figure this out</p>
+</div></td></tr><tr><td id='variant.MOD'><code>MOD</code></td><td><div class='docblock'><p><code>mod</code>: <code>Mod</code>ulo</p>
+
+<p>Pops two numbers off of the stack and divides the first by the second,
+pushing the remainder onto the stack.</p>
+
+<p>TODO: figure out what happens when you try to modulo things that
+aren&#39;t numbers (maybe the compiler won&#39;t let this happen?).</p>
+</div></td></tr><tr><td id='variant.EQ'><code>EQ</code></td><td><div class='docblock'><p><code>eq</code>: <code>Eq</code>uality of atoms</p>
+</div></td></tr><tr><td id='variant.GT'><code>GT</code></td><td><div class='docblock'><p><code>gt</code>: <code>G</code>reater <code>t</code>han</p>
+
+<p>Pops two numbers on the stack and puts a &#39;true&#39; on the stack
+if the first atom i64 greater than the other atom, false otherwi64e.</p>
+</div></td></tr><tr><td id='variant.GTE'><code>GTE</code></td><td><div class='docblock'><p><code>gte</code>: <code>G</code>reater <code>t</code>han or <code>e</code>qual</p>
+</div></td></tr><tr><td id='variant.LT'><code>LT</code></td><td><div class='docblock'><p><code>lt</code>: <code>L</code>ess <code>t</code>han</p>
+</div></td></tr><tr><td id='variant.LTE'><code>LTE</code></td><td><div class='docblock'><p><code>lte</code>: <code>L</code>ess <code>t</code>han or <code>e</code>qual</p>
+</div></td></tr><tr><td id='variant.ATOM'><code>ATOM</code></td><td><div class='docblock'><p><code>atom</code>: test if <code>atom</code></p>
+
+<p>Pops an item from the stack and returns true if it&#39;s an atom, false
+otherwise.</p>
+</div></td></tr><tr><td id='variant.CAR'><code>CAR</code></td><td><div class='docblock'><p><code>car</code>: <code>C</code>ontents of <code>A</code>ddress <code>R</code>egister</p>
+
+<p>Pops a list from the stack and returns the list&#39;s <code>car</code> (head)</p>
+</div></td></tr><tr><td id='variant.CDR'><code>CDR</code></td><td><div class='docblock'><p><code>cdr</code>: <code>C</code>ontents of <code>D</code>ecrement <code>R</code>egister</p>
+
+<p>Pops a list from the stack and returns the list&#39;s <code>cdr</code> (tail)</p>
+</div></td></tr><tr><td id='variant.CONS'><code>CONS</code></td><td><div class='docblock'><p><code>cons</code>: <code>Cons</code>truct</p>
+
+<p>Pops an item and a list from the stack and returns the list, with
+the item prepended.</p>
+</div></td></tr><tr><td id='variant.NULL'><code>NULL</code></td><td><div class='docblock'><p><code>null</code>: test if <code>null</code></p>
+
+<p>Pops an item from the stack and returns true if it is <code>nil</code>, false
+ otherwise.</p>
+</div></td></tr><tr><td id='variant.STOP'><code>STOP</code></td><td><div class='docblock'><p><code>stop</code>: <code>stop</code> execution</p>
+
+<p>Terminates program execution. The <code>eval_program()</code> function will return
+the last state of the VM.</p>
+</div></td></tr><tr><td id='variant.READC'><code>READC</code></td><td><div class='docblock'><p><code>readc</code>: <code>read</code> <code>c</code>haracter</p>
+
+<p>Reads a character from the machine&#39;s input stream and places it
+on top of the stack</p>
+</div></td></tr><tr><td id='variant.WRITEC'><code>WRITEC</code></td><td><div class='docblock'><p><code>writec</code>: <code>write</code> <code>c</code>haracter</p>
+
+<p>Writes a character from the top of the stack to the machine&#39;s
+output stream.</p>
+</div></td></tr><tr><td id='variant.APCC'><code>APCC</code></td><td><div class='docblock'><p><code>apcc</code>: <code>ap</code>ply with <code>c</code>urrent <code>c</code>ontinuation</p>
+
+<p>Applies a closure and captures the continuation that can
+then be applied with <code>ap</code>.</p>
+</div></td></tr></table><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='../../seax_util/bytecode/trait.Encode.html' title='seax_util::bytecode::Encode'>Encode</a> for <a class='enum' href='../../seax_util/cell/enum.Inst.html' title='seax_util::cell::Inst'>Inst</a></code></h3><div class='impl-items'><h4 id='method.emit' class='method'><code>fn <a href='../../seax_util/bytecode/trait.Encode.html#method.emit' class='fnname'>emit</a>(&amp;self) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;</code></h4>
+</div><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='enum' href='../../seax_util/cell/enum.Inst.html' title='seax_util::cell::Inst'>Inst</a></code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='enum' href='../../seax_util/cell/enum.Inst.html' title='seax_util::cell::Inst'>Inst</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<h4 id='method.ne' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, __arg_0: &amp;<a class='enum' href='../../seax_util/cell/enum.Inst.html' title='seax_util::cell::Inst'>Inst</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='enum' href='../../seax_util/cell/enum.Inst.html' title='seax_util::cell::Inst'>Inst</a></code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='enum' href='../../seax_util/cell/enum.Inst.html' title='seax_util::cell::Inst'>Inst</a></code></h4>
+<h4 id='method.clone_from' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
+</div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='enum' href='../../seax_util/cell/enum.Inst.html' title='seax_util::cell::Inst'>Inst</a></code></h3><div class='impl-items'></div><h3 class='impl'><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='enum' href='../../seax_util/cell/enum.Inst.html' title='seax_util::cell::Inst'>Inst</a></code></h3><div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='http://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#method.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard Shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search Tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+            <p>
+                Search functions by type signature (e.g.
+                <code>vec -> usize</code>)
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "seax_util";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>
