@@ -5,9 +5,6 @@
 #![cfg_attr(feature = "unstable", staged_api)]
 #![cfg_attr(feature = "unstable", stable(feature = "util", since = "0.0.1"))]
 
-//! Seax Utilities
-//! --------------
-//!
 //! Utility library containing code for building programs involving the
 //! [Seax](hawkweisman.me/seax) platform. Seax is a virtual-machine-based
 //! runtime environment for functional programming languages.
@@ -28,9 +25,6 @@
 #[cfg(test)] extern crate quickcheck;
 extern crate byteorder;
 
-/// List
-/// ----
-///
 /// Contains singly-linked list and stack implementations.
 ///
 /// `List<T>` is a singly-linked `cons` list.
@@ -40,10 +34,7 @@ extern crate byteorder;
     stable(feature = "list", since="0.1.0") )]
 #[macro_use] pub mod list;
 
-/// Cell
-/// ----
-///
-/// Contains the SVM cell and instruction types.
+/// Seax VM cell and instruction types.
 ///
 /// A cell in the VM can be either an atom (single item, either unsigned
 /// int, signed int, float, or string), a pointer to a list cell, or an
@@ -52,18 +43,12 @@ extern crate byteorder;
     stable(feature = "cell", since = "0.1.0") )]
 #[macro_use] pub mod cell;
 
-/// Bytecode
-/// --------
-///
-/// Contains code for encoding and decoding SVM cells to and from bytecode.
+/// Functions for encoding and decoding Seax bytecode.
 #[cfg_attr(feature = "unstable",
     unstable(feature = "bytecode") )]
 pub mod bytecode;
 
-/// Compiler Tools
-/// --------------
-///
-/// Contains general-purpose code for compilers targeting the Seax platform.
+/// General-purpose code for compilers targeting the Seax platform.
 #[cfg_attr(feature = "unstable",
     stable(feature = "compile", since = "0.0.1") )]
 pub mod compiler_tools;
