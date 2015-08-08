@@ -439,7 +439,8 @@ impl<T> List<T> {
 }
 #[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
-impl<'a, T> fmt::Display for List<T> where T: fmt::Display {
+impl<'a, T> fmt::Display for List<T>
+where T: fmt::Display {
     #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -453,7 +454,8 @@ impl<'a, T> fmt::Display for List<T> where T: fmt::Display {
 
 #[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
-impl<'a, T> fmt::Debug for List<T> where T: fmt::Debug {
+impl<'a, T> fmt::Debug for List<T>
+where T: fmt::Debug {
     #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

@@ -51,8 +51,7 @@ pub type CompileResult = Result<Vec<SVMCell>, String>;
 #[cfg_attr(feature = "unstable",
     stable(feature = "scope", since = "0.0.1") )]
 pub trait Scope<K>
-    where K: Eq + Hash
-{
+where K: Eq + Hash {
     /// Bind a name to a scope.
     ///
     /// Returnsthe indices for that name in the SVM environment.

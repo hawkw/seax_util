@@ -179,8 +179,7 @@ const BYTE_NIL: u8        = 0x00;
 #[cfg_attr(feature = "unstable",
     unstable(feature = "decode") )]
 pub fn decode_program<R>(source: &mut R) -> Result<List<SVMCell>, String>
-    where R: Read
-{
+where R: Read {
     let mut decoder = Decoder::new(source);
     decoder
         .check_ident_bytes()
@@ -248,8 +247,7 @@ fn decode_inst(byte: &u8) -> Result<Inst, String> {
 #[cfg_attr(feature = "unstable",
     stable(feature = "decode", since="0.1.0"))]
 impl<'a, R> Decoder<'a, R>
-    where R: Read
-{
+where R: Read {
     /// Check the identifying bytes
     ///
     /// The two-byte sequence `0x5ECD` is expected at the beginning of all
@@ -435,7 +433,8 @@ impl<'a, R> Decoder<'a, R>
 
 #[cfg_attr(feature = "unstable",
     stable(feature = "decode", since="0.1.0") )]
-impl<'a, R> Iterator for Decoder<'a, R> where R: Read {
+impl<'a, R> Iterator for Decoder<'a, R>
+where R: Read {
     #[cfg_attr(feature = "unstable",
         stable(feature = "decode", since="0.1.0") )]
     type Item = SVMCell;
@@ -449,7 +448,8 @@ impl<'a, R> Iterator for Decoder<'a, R> where R: Read {
 }
 #[cfg_attr(feature = "unstable",
     stable(feature = "decode", since="0.1.0") )]
-impl<'a, R> fmt::Debug for Decoder<'a, R>  where R: fmt::Debug {
+impl<'a, R> fmt::Debug for Decoder<'a, R>
+where R: fmt::Debug {
     #[cfg_attr(feature = "unstable",
         stable(feature = "decode", since="0.1.0") )]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -564,7 +564,8 @@ impl Encode for Inst {
 
 #[cfg_attr(feature = "unstable",
     stable(feature = "encode", since="0.1.0") )]
-impl<T> Encode for List<T> where T: Encode {
+impl<T> Encode for List<T>
+where T: Encode {
     #[cfg_attr(feature = "unstable",
         stable(feature = "encode", since="0.1.0") )]
     fn emit(&self) -> Vec<u8> {

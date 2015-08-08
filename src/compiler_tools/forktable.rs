@@ -27,9 +27,9 @@ use super::{SymTable,Index,Scope};
 #[cfg_attr(feature = "unstable",
     stable(feature = "forktable", since = "0.0.1") )]
 pub struct ForkTable<'a, K, V>
-    where K: 'a + Eq + Hash,
-          V: 'a
-{
+where K: Eq + Hash,
+      K: 'a,
+      V: 'a {
     table: HashMap<K, V>,
     whiteouts: HashSet<K>,
     parent: Option<&'a ForkTable<'a, K, V>>,
@@ -39,8 +39,7 @@ pub struct ForkTable<'a, K, V>
 #[cfg_attr(feature = "unstable",
     stable(feature = "forktable", since = "0.0.1") )]
 impl<'a, K, V> ForkTable<'a, K, V>
-    where K: Eq + Hash
-{
+where K: Eq + Hash {
 
     /// Returns a reference to the value corresponding to the key.
     ///
@@ -82,9 +81,8 @@ impl<'a, K, V> ForkTable<'a, K, V>
     #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn get<Q: ?Sized>(&self, key: &Q) -> Option<&V>
-        where K: Borrow<Q>,
-              Q: Hash + Eq
-    {
+    where K: Borrow<Q>,
+          Q: Hash + Eq {
         if self.whiteouts.contains(key) {
             None
         } else {
@@ -139,9 +137,8 @@ impl<'a, K, V> ForkTable<'a, K, V>
     #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn get_mut<Q: ?Sized>(&mut self, key: &Q) -> Option<&mut V>
-        where K: Borrow<Q>,
-              Q: Hash + Eq
-    {
+    where K: Borrow<Q>,
+          Q: Hash + Eq {
         self.table.get_mut(key)
     }
 
@@ -193,8 +190,7 @@ impl<'a, K, V> ForkTable<'a, K, V>
     #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn remove(&mut self, key: &K) -> Option<V>
-        where K: Clone
-    {
+    where K: Clone {
         if self.table.contains_key(&key) {
             self.table.remove(&key)
         } else if self.chain_contains_key(&key) {
@@ -294,9 +290,8 @@ impl<'a, K, V> ForkTable<'a, K, V>
     #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn contains_key<Q: ?Sized>(&self, key: &Q) -> bool
-        where K: Borrow<Q>,
-              Q: Hash + Eq
-    {
+    where K: Borrow<Q>,
+          Q: Hash + Eq {
         !self.whiteouts.contains(key) &&
          self.table.contains_key(key)
     }
@@ -338,9 +333,8 @@ impl<'a, K, V> ForkTable<'a, K, V>
     #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn chain_contains_key<Q:? Sized>(&self, key: &Q) -> bool
-        where K: Borrow<Q>,
-              Q: Hash + Eq
-    {
+    where K: Borrow<Q>,
+          Q: Hash + Eq {
         self.table.contains_key(key) ||
             (!self.whiteouts.contains(key) &&
                 self.parent
@@ -415,10 +409,9 @@ impl<'a, K, V> ForkTable<'a, K, V>
 #[cfg_attr(feature = "unstable",
     unstable(feature = "forktable") )]
 impl<'a, 'b, K, Q: ?Sized, V> ops::Index<&'b Q> for ForkTable<'a, K, V>
-    where K: Eq + Hash,
-          K: Borrow<Q>,
-          Q: Eq + Hash
-{
+where K: Borrow<Q>,
+      K: Eq + Hash,
+      Q: Eq + Hash {
     #[cfg_attr(feature = "unstable",
         unstable(feature = "forktable") )]
     type Output = V;
@@ -448,9 +441,9 @@ impl<'a, 'b, K, Q: ?Sized, V> ops::Index<&'b Q> for ForkTable<'a, K, V>
 #[cfg_attr(feature = "unstable",
     unstable(feature = "forktable") )]
 impl<'a, 'b, K, Q: ?Sized, V> ops::IndexMut<&'b Q> for ForkTable<'a, K, V>
-    where K: Eq + Hash + Borrow<Q>,
-          Q: Eq + Hash
-{
+where K: Borrow<Q>,
+      K: Eq + Hash,
+      Q: Eq + Hash {
     #[inline]
     #[cfg_attr(feature = "unstable",
         unstable(feature = "forktable") )]
@@ -504,7 +497,7 @@ impl<'a> Scope<&'a str> for SymTable<'a> {
     ///  + `None` if the name is unbound
     #[cfg_attr(feature = "unstable",
         stable(feature = "scope", since = "0.0.1") )]
-    fn lookup(&self, name: &&'a str)            -> Option<Index> {
+    fn lookup(&self, name: &&'a str) -> Option<Index> {
         self.get(name) // TODO: shouldn't usize be Copy?
             .map(|&( lvl, idx )| (lvl.clone(), idx.clone()) )
     }
