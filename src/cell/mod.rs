@@ -309,11 +309,11 @@ pub enum Inst {
     ///
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    NIL,
+    NIL = 0x00,
     /// `ldc`: `L`oa`d` `C`onstant. Loads a constant (atom)
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    LDC,
+    LDC = 0x1C,
     /// `ld`: `L`oa`d`. Pushes a variable onto the stack.
     ///
     /// The variable is indicated by the argument, a pair.
@@ -325,7 +325,7 @@ pub enum Inst {
     ///
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    LD,
+    LD = 0x01,
     /// `ldf`: `L`oa`d` `F`unction.
     ///
     ///  Takes one list argument representing a function and constructs
@@ -336,7 +336,7 @@ pub enum Inst {
     ///
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    LDF,
+    LDF = 0x02,
     /// `join`
     ///
     /// Pops a list reference from the dump and makes thi64 the new value
@@ -347,7 +347,7 @@ pub enum Inst {
     ///
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    JOIN,
+    JOIN = 0x05,
     /// `ap`: `Ap`ply.
     ///
     /// Pops a closure and a list of parameter values from the stack.
@@ -361,7 +361,7 @@ pub enum Inst {
     ///
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    AP,
+    AP = 0x03,
     /// `ret`: `Ret`urn.
     ///
     /// Pops one return value from the stack, restores
@@ -369,20 +369,20 @@ pub enum Inst {
     /// the return value onto the now-current stack.
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    RET,
+    RET = 0x07,
     /// `dum`: `Dum`my.
     ///
     /// Pops a dummy environment (an empty list) onto the `$e` stack.
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    DUM,
+    DUM = 0x08,
     /// `rap`: `R`ecursive `Ap`ply.
     /// Works like `ap`, only that it replaces an occurrence of a
     /// dummy environment with the current one, thus making recursive
     ///  functions possible.
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    RAP,
+    RAP = 0x06,
     /// `sel`: `Sel`ect branch
     ///
     /// Expects two list arguments on the control stack, and pops a value
@@ -395,7 +395,7 @@ pub enum Inst {
     ///
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    SEL,
+    SEL = 0x09,
     /// `add`
     ///
     /// Pops two numbers off of the stack and adds them, pu64hing the
@@ -406,7 +406,7 @@ pub enum Inst {
     /// numbers (maybe the compiler won't let this happen?).
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    ADD,
+    ADD = 0x0A,
     /// `sub`: `Sub`tract
     ///
     /// Pops two numbers off of the stack and subtracts the first from the
@@ -417,7 +417,7 @@ pub enum Inst {
     /// aren't numbers (maybe the compiler won't let thi64 happen?).
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    SUB,
+    SUB = 0x0B,
     /// `mul`: `Mul`tiply
     ///
     /// Pops two numbers off of the stack and multiplies them, pu64hing the
@@ -428,7 +428,7 @@ pub enum Inst {
     /// aren't numbers (maybe the compiler won't let thi64 happen?).
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    MUL,
+    MUL = 0x0C,
     /// `div`: `Div`ide
     ///
     /// Pops two numbers off of the stack and divides the first by the second,
@@ -438,7 +438,7 @@ pub enum Inst {
     /// aren't numbers (maybe the compiler won't let thi64 happen?).
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    DIV,
+    DIV = 0x0D,
     /// `fdiv`: `F`loating-point `div`ide
     ///
     /// Pops two numbers off of the stack and divides the first by the second,
@@ -451,7 +451,7 @@ pub enum Inst {
     /// I guess the compiler can figure this out
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    FDIV,
+    FDIV = 0x0F,
     /// `mod`: `Mod`ulo
     ///
     /// Pops two numbers off of the stack and divides the first by the second,
@@ -461,89 +461,89 @@ pub enum Inst {
     /// aren't numbers (maybe the compiler won't let this happen?).
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    MOD,
+    MOD = 0x0E,
     /// `eq`: `Eq`uality of atoms
     #[cfg_attr(feature = "unstable",
     stable(feature="vm_core", since="0.1.0") )]
-    EQ,
+    EQ = 0x10,
     /// `gt`: `G`reater `t`han
     ///
     /// Pops two numbers on the stack and puts a 'true' on the stack
     /// if the first atom i64 greater than the other atom, false otherwi64e.
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    GT,
+    GT = 0x11,
     /// `gte`: `G`reater `t`han or `e`qual
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    GTE,
+    GTE = 0x12,
     /// `lt`: `L`ess `t`han
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    LT,
+    LT = 0x13,
     /// `lte`: `L`ess `t`han or `e`qual
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    LTE,
+    LTE = 0x14,
     /// `atom`: test if `atom`
     ///
     /// Pops an item from the stack and returns true if it's an atom, false
     /// otherwise.
     #[cfg_attr(feature = "unstable",
-    stable(feature="vm_core", since="0.1.0") )]
-    ATOM,
+        stable(feature="vm_core", since="0.1.0") )]
+    ATOM = 0x15,
     /// `car`: `C`ontents of `A`ddress `R`egister
     ///
     /// Pops a list from the stack and returns the list's `car` (head)
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    CAR,
+    CAR = 0x1A,
     /// `cdr`: `C`ontents of `D`ecrement `R`egister
     ///
     /// Pops a list from the stack and returns the list's `cdr` (tail)
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    CDR,
+    CDR = 0x1B,
     /// `cons`: `Cons`truct
     ///
     /// Pops an item and a list from the stack and returns the list, with
     /// the item prepended.
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    CONS,
+    CONS = 0x19,
     /// `null`: test if `null`
     ///
     ///  Pops an item from the stack and returns true if it is `nil`, false
     ///  otherwise.
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    NULL,
+    NULL = 0x16,
     /// `stop`: `stop` execution
     ///
     /// Terminates program execution. The `eval_program()` function will return
     /// the last state of the VM.
     #[cfg_attr(feature = "unstable",
         stable(feature = "vm_core", since="0.1.0") )]
-    STOP,
+    STOP = 0x1D,
     /// `readc`: `read` `c`haracter
     ///
     /// Reads a character from the machine's input stream and places it
     /// on top of the stack
     #[cfg_attr(feature = "unstable",
         stable(feature = "vm_core", since="0.1.0") )]
-    READC,
+    READC = 0x17,
     /// `writec`: `write` `c`haracter
     ///
     /// Writes a character from the top of the stack to the machine's
     /// output stream.
     #[cfg_attr(feature = "unstable",
         stable(feature = "vm_core", since="0.1.0") )]
-    WRITEC,
+    WRITEC = 0x18,
     /// `apcc`: `ap`ply with `c`urrent `c`ontinuation
     ///
     /// Applies a closure and captures the continuation that can
     /// then be applied with `ap`.
     #[cfg_attr(feature = "unstable",
         unstable(feature = "callcc"))]
-    APCC,
+    APCC = 0x04,
 }

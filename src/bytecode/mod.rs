@@ -130,13 +130,13 @@ use std::error::Error;
 use std::io::Read;
 use std::fmt;
 use std::char;
+use std::mem::transmute;
 
 use super::List;
 use super::List::*;
 use super::{SVMCell,Atom,Inst};
 use super::SVMCell::*;
 use super::Atom::*;
-use super::Inst::*;
 
 #[cfg(test)]
 mod tests;
@@ -204,36 +204,8 @@ pub struct Decoder<'a, R: 'a> {
     stable(feature = "decode", since="0.1.0"))]
 fn decode_inst(byte: &u8) -> Result<Inst, String> {
     match *byte {
-        BYTE_NIL => Ok(NIL),
-        0x01 => Ok(LD),
-        0x02 => Ok(LDF),
-        0x03 => Ok(AP),
-        0x04 => Ok(APCC),
-        0x05 => Ok(JOIN),
-        0x06 => Ok(RAP),
-        0x07 => Ok(RET),
-        0x08 => Ok(DUM),
-        0x09 => Ok(SEL),
-        0x0A => Ok(ADD),
-        0x0B => Ok(SUB),
-        0x0C => Ok(MUL),
-        0x0D => Ok(DIV),
-        0x0E => Ok(MOD),
-        0x0F => Ok(FDIV),
-        0x10 => Ok(EQ),
-        0x11 => Ok(GT),
-        0x12 => Ok(GTE),
-        0x13 => Ok(LT),
-        0x14 => Ok(LTE),
-        0x15 => Ok(ATOM),
-        0x16 => Ok(NULL),
-        0x17 => Ok(READC),
-        0x18 => Ok(WRITEC),
-        0x19 => Ok(CONS),
-        0x1A => Ok(CAR),
-        0x1B => Ok(CDR),
-        0x1C => Ok(LDC),
-        0x1D => Ok(STOP),
+        b if b >= BYTE_NIL && b < RESERVED_START =>
+            unsafe { Ok(transmute(b)) },
         b if b >= RESERVED_START &&
              b <= (RESERVED_START + RESERVED_LEN) =>
             Err(format!("Unimplemented: reserved byte {:#X}", b)),
@@ -480,7 +452,7 @@ impl Encode for SVMCell {
     fn emit(&self) -> Vec<u8> {
         match *self {
             AtomCell(ref atom) => atom.emit(),
-            InstCell(ref inst) => inst.emit(),
+            InstCell(inst) => vec![inst as u8],
             ListCell(ref list) => (*list).emit()
         }
     }
@@ -521,46 +493,46 @@ impl Encode for Atom {
     }
 }
 
-#[cfg_attr(feature = "unstable",
-    stable(feature = "encode", since="0.1.0") )]
-impl Encode for Inst {
-    #[cfg_attr(feature = "unstable",
-        stable(feature = "encode", since="0.1.0") )]
-    fn emit(&self) -> Vec<u8> {
-        match *self {
-            NIL     => vec![BYTE_NIL],
-            LD      => vec![0x01],
-            LDF     => vec![0x02],
-            AP      => vec![0x03],
-            APCC    => vec![0x04],
-            JOIN    => vec![0x05],
-            RAP     => vec![0x06],
-            RET     => vec![0x07],
-            DUM     => vec![0x08],
-            SEL     => vec![0x09],
-            ADD     => vec![0x0A],
-            SUB     => vec![0x0B],
-            MUL     => vec![0x0C],
-            DIV     => vec![0x0D],
-            MOD     => vec![0x0E],
-            FDIV    => vec![0x0F],
-            EQ      => vec![0x10],
-            GT      => vec![0x11],
-            GTE     => vec![0x12],
-            LT      => vec![0x13],
-            LTE     => vec![0x14],
-            ATOM    => vec![0x15],
-            NULL    => vec![0x16],
-            READC   => vec![0x17],
-            WRITEC  => vec![0x18],
-            CONS    => vec![0x19],
-            CAR     => vec![0x1A],
-            CDR     => vec![0x1B],
-            LDC     => vec![0x1C],
-            STOP    => vec![0x1D]
-        }
-    }
-}
+// #[cfg_attr(feature = "unstable",
+//     stable(feature = "encode", since="0.1.0") )]
+// impl Encode for Inst {
+//     #[cfg_attr(feature = "unstable",
+//         stable(feature = "encode", since="0.1.0") )]
+//     fn emit(&self) -> Vec<u8> {
+//         match *self {
+//             NIL     => vec![BYTE_NIL],
+//             LD      => vec![0x01],
+//             LDF     => vec![0x02],
+//             AP      => vec![0x03],
+//             APCC    => vec![0x04],
+//             JOIN    => vec![0x05],
+//             RAP     => vec![0x06],
+//             RET     => vec![0x07],
+//             DUM     => vec![0x08],
+//             SEL     => vec![0x09],
+//             ADD     => vec![0x0A],
+//             SUB     => vec![0x0B],
+//             MUL     => vec![0x0C],
+//             DIV     => vec![0x0D],
+//             MOD     => vec![0x0E],
+//             FDIV    => vec![0x0F],
+//             EQ      => vec![0x10],
+//             GT      => vec![0x11],
+//             GTE     => vec![0x12],
+//             LT      => vec![0x13],
+//             LTE     => vec![0x14],
+//             ATOM    => vec![0x15],
+//             NULL    => vec![0x16],
+//             READC   => vec![0x17],
+//             WRITEC  => vec![0x18],
+//             CONS    => vec![0x19],
+//             CAR     => vec![0x1A],
+//             CDR     => vec![0x1B],
+//             LDC     => vec![0x1C],
+//             STOP    => vec![0x1D]
+//         }
+//     }
+// }
 
 #[cfg_attr(feature = "unstable",
     stable(feature = "encode", since="0.1.0") )]
