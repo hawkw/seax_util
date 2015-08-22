@@ -386,7 +386,7 @@ where K: Eq + Hash
     /// Provides an iterator visiting all values in arbitrary
     /// order. Iterator element type is &'b V.
     #[cfg_attr(feature = "unstable",
-        unstable(feature = "forktable") )]
+        unstable(feature = "forktable", since  = "0.1.2") )]
     pub fn values<'b>(&'b self) -> Values<'b, K, V> {
         self.table.values()
     }
@@ -396,7 +396,7 @@ where K: Eq + Hash
     /// Provides an iterator visiting all keys in arbitrary
     /// order. Iterator element type is &'b K.
     #[cfg_attr(feature = "unstable",
-        unstable(feature = "forktable") )]
+        stable(feature = "forktable", since  = "0.1.2") )]
     pub fn keys<'b>(&'b self) -> Keys<'b, K, V>{
         self.table.keys()
     }
