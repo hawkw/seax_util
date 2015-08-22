@@ -113,6 +113,41 @@ impl fmt::Debug for Atom {
     }
 }
 
+macro_rules! e {
+    ($e:expr) => { $e }
+}
+macro_rules! impl_ops {
+    ($name:ident, $symbol:tt) => {
+        fn $name(self, other: Atom) -> Atom {
+            match (self, other) {
+                // same type:  no coercion
+                (SInt(a), SInt(b))      => SInt(e!(a $symbol b)),
+                (UInt(a), UInt(b))      => UInt(e!(a $symbol b)),
+                (Float(a), Float(b))    => Float(e!(a $symbol b)),
+                (Char(a), Char(b))      => Char(e!(a as u8 $symbol b as u8) as char),
+                // float & int: coerce to float
+                (Float(a), SInt(b))     => Float(e!(a $symbol b as f64)),
+                (Float(a), UInt(b))     => Float(e!(a $symbol b as f64) ),
+                (SInt(a), Float(b))     => Float(e!(a as f64 $symbol b)),
+                (UInt(a), Float(b))     => Float(e!(a as f64 $symbol b)),
+                // uint & sint: coerce to sint
+                (UInt(a), SInt(b))      => SInt(e!(a as i64 $symbol b)),
+                (SInt(a), UInt(b))      => SInt(e!(a $symbol b as i64)),
+                // char * any: coerce to char
+                // because of the supported operations on Rust chars,
+                // everything has to be cast to u8 (byte) to allow
+                // arithmetic ops and then cast back to char.
+                (Char(a), UInt(b))      => Char(e!(a as u8 $symbol b as u8) as char),
+                (Char(a), SInt(b))      => Char(e!(a as u8 $symbol b as u8) as char),
+                (Char(a), Float(b))     => Char(e!(a as u8 $symbol b as u8) as char),
+                (UInt(a), Char(b))      => Char(e!(a as u8 $symbol b as u8) as char),
+                (SInt(a), Char(b))      => Char(e!(a as u8 $symbol b as u8) as char),
+                (Float(a), Char(b))     => Char(e!(a as u8 $symbol b as u8) as char)
+            }
+        }
+    }
+}
+
 #[cfg_attr(feature = "unstable",
     stable(feature="vm_core", since="0.1.0") )]
 impl ops::Add for Atom {
@@ -121,33 +156,7 @@ impl ops::Add for Atom {
     type Output = Atom;
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    fn add(self, other: Atom) -> Atom {
-        match (self, other) {
-            // same type:  no coercion
-            (SInt(a), SInt(b))      => SInt(a + b),
-            (UInt(a), UInt(b))      => UInt(a + b),
-            (Float(a), Float(b))    => Float(a + b),
-            (Char(a), Char(b))      => Char((a as u8 + b as u8) as char),
-            // float + int: coerce to float
-            (Float(a), SInt(b))     => Float(a + b as f64),
-            (Float(a), UInt(b))     => Float(a + b as f64),
-            (SInt(a), Float(b))     => Float(a as f64 + b),
-            (UInt(a), Float(b))     => Float(a as f64 + b),
-            // uint + sint: coerce to sint
-            (UInt(a), SInt(b))      => SInt(a as i64 + b),
-            (SInt(a), UInt(b))      => SInt(a + b as i64),
-            // char + any: coerce to char
-            // because of the supported operations on Ru64t chars,
-            // everything has to be cast to u8 (byte) to allow
-            // arithmetic ops and then cast back to char.
-            (Char(a), UInt(b))      => Char((a as u8 + b as u8) as char),
-            (Char(a), SInt(b))      => Char((a as u8 + b as u8) as char),
-            (Char(a), Float(b))     => Char((a as u8 + b as u8) as char),
-            (UInt(a), Char(b))      => Char((a as u8 + b as u8) as char),
-            (SInt(a), Char(b))      => Char((a as u8 + b as u8) as char),
-            (Float(a), Char(b))     => Char((a as u8 + b as u8) as char)
-        }
-    }
+    impl_ops!(add, +);
 
 }
 #[cfg_attr(feature = "unstable",
@@ -158,32 +167,9 @@ impl ops::Sub for Atom {
     type Output = Atom;
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    fn sub(self, other: Atom) -> Atom {
-        match (self, other) {
-            // same type:  no coercion
-            (SInt(a), SInt(b))      => SInt(a - b),
-            (UInt(a), UInt(b))      => UInt(a - b),
-            (Float(a), Float(b))    => Float(a - b),
-            (Char(a), Char(b))      => Char((a as u8 - b as u8) as char),
-            // float + int: coerce to float
-            (Float(a), SInt(b))     => Float(a - b as f64),
-            (Float(a), UInt(b))     => Float(a - b as f64),
-            (SInt(a), Float(b))     => Float(a as f64 - b),
-            (UInt(a), Float(b))     => Float(a as f64 - b),
-            // uint + sint: coerce to sint
-            (UInt(a), SInt(b))      => SInt(a as i64 - b),
-            (SInt(a), UInt(b))      => SInt(a - b as i64),
-            // char + any: coerce to char
-            (Char(a), UInt(b))      => Char((a as u8 - b as u8) as char),
-            (Char(a), SInt(b))      => Char((a as u8 - b as u8) as char),
-            (Char(a), Float(b))     => Char((a as u8 - b as u8) as char),
-            (UInt(a), Char(b))      => Char((a as u8 - b as u8) as char),
-            (SInt(a), Char(b))      => Char((a as u8 - b as u8) as char),
-            (Float(a), Char(b))     => Char((a as u8 - b as u8) as char)
-        }
-    }
-
+    impl_ops!(sub, -);
 }
+
 #[cfg_attr(feature = "unstable",
     stable(feature="vm_core", since="0.1.0") )]
 impl ops::Div for Atom {
@@ -192,30 +178,7 @@ impl ops::Div for Atom {
     type Output = Atom;
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    fn div(self, other: Atom) -> Atom {
-        match (self, other) {
-            // same type:  no coercion
-            (SInt(a), SInt(b))      => SInt(a / b),
-            (UInt(a), UInt(b))      => UInt(a / b),
-            (Float(a), Float(b))    => Float(a / b),
-            (Char(a), Char(b))      => Char((a as u8 / b as u8) as char),
-            // float + int: coerce to float
-            (Float(a), SInt(b))     => Float(a / b as f64),
-            (Float(a), UInt(b))     => Float(a / b as f64),
-            (SInt(a), Float(b))     => Float(a as f64 / b),
-            (UInt(a), Float(b))     => Float(a as f64 / b),
-            // uint + sint: coerce to sint
-            (UInt(a), SInt(b))      => SInt(a as i64 / b),
-            (SInt(a), UInt(b))      => SInt(a / b as i64),
-            // char + any: coerce to char
-            (Char(a), UInt(b))      => Char((a as u8 / b as u8) as char),
-            (Char(a), SInt(b))      => Char((a as u8 / b as u8) as char),
-            (Char(a), Float(b))     => Char((a as u8 / b as u8) as char),
-            (UInt(a), Char(b))      => Char((a as u8 / b as u8) as char),
-            (SInt(a), Char(b))      => Char((a as u8 / b as u8) as char),
-            (Float(a), Char(b))     => Char((a as u8 / b as u8) as char)
-        }
-    }
+    impl_ops!(div, /);
 
 }
 #[cfg_attr(feature = "unstable",
@@ -227,30 +190,7 @@ impl ops::Mul for Atom {
 
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    fn mul(self, other: Atom) -> Atom {
-        match (self, other) {
-            // same type:  no coercion
-            (SInt(a), SInt(b))      => SInt(a * b),
-            (UInt(a), UInt(b))      => UInt(a * b),
-            (Float(a), Float(b))    => Float(a * b),
-            (Char(a), Char(b))      => Char((a as u8 * b as u8) as char),
-            // float + int: coerce to float
-            (Float(a), SInt(b))     => Float(a * b as f64),
-            (Float(a), UInt(b))     => Float(a * b as f64),
-            (SInt(a), Float(b))     => Float(a as f64* b),
-            (UInt(a), Float(b))     => Float(a as f64* b),
-            // uint + sint: coerce to sint
-            (UInt(a), SInt(b))      => SInt(a as i64 * b),
-            (SInt(a), UInt(b))      => SInt(a * b as i64),
-            // char + any: coerce to char
-            (Char(a), UInt(b))      => Char((a as u8 * b as u8) as char),
-            (Char(a), SInt(b))      => Char((a as u8 * b as u8) as char),
-            (Char(a), Float(b))     => Char((a as u8 * b as u8) as char),
-            (UInt(a), Char(b))      => Char((a as u8 * b as u8) as char),
-            (SInt(a), Char(b))      => Char((a as u8 * b as u8) as char),
-            (Float(a), Char(b))     => Char((a as u8 * b as u8) as char)
-        }
-    }
+    impl_ops!(mul, *);
 
 }
 #[cfg_attr(feature = "unstable",
@@ -262,30 +202,7 @@ impl ops::Rem for Atom {
 
     #[cfg_attr(feature = "unstable",
         stable(feature="vm_core", since="0.1.0") )]
-    fn rem(self, other: Atom) -> Atom {
-        match (self, other) {
-            // same type:  no coercion
-            (SInt(a), SInt(b))      => SInt(a % b),
-            (UInt(a), UInt(b))      => UInt(a % b),
-            (Float(a), Float(b))    => Float(a % b),
-            (Char(a), Char(b))      => Char((a as u8 % b as u8) as char),
-            // float + int: coerce to float
-            (Float(a), SInt(b))     => Float(a % b as f64),
-            (Float(a), UInt(b))     => Float(a % b as f64),
-            (SInt(a), Float(b))     => Float(a as f64 % b),
-            (UInt(a), Float(b))     => Float(a as f64 % b),
-            // uint + sint: coerce to sint
-            (UInt(a), SInt(b))      => SInt(a as i64 % b),
-            (SInt(a), UInt(b))      => SInt(a % b as i64),
-            // char + any: coerce to char
-            (Char(a), UInt(b))      => Char((a as u8 % b as u8) as char),
-            (Char(a), SInt(b))      => Char((a as u8 % b as u8) as char),
-            (Char(a), Float(b))     => Char((a as u8 % b as u8) as char),
-            (UInt(a), Char(b))      => Char((a as u8 % b as u8) as char),
-            (SInt(a), Char(b))      => Char((a as u8 % b as u8) as char),
-            (Float(a), Char(b))     => Char((a as u8 % b as u8) as char)
-        }
-    }
+    impl_ops!(rem, %);
 
 }
 
