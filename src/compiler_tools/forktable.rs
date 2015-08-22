@@ -407,18 +407,18 @@ where K: Eq + Hash {
 /// assert_eq!(table[&1], "One");
 /// ```
 #[cfg_attr(feature = "unstable",
-    unstable(feature = "forktable") )]
+    stable(feature = "forktable", since = "0.1.1") )]
 impl<'a, 'b, K, Q: ?Sized, V> ops::Index<&'b Q> for ForkTable<'a, K, V>
 where K: Borrow<Q>,
       K: Eq + Hash,
       Q: Eq + Hash {
     #[cfg_attr(feature = "unstable",
-        unstable(feature = "forktable") )]
+        stable(feature = "forktable", since = "0.1.1") )]
     type Output = V;
 
     #[inline]
     #[cfg_attr(feature = "unstable",
-        unstable(feature = "forktable") )]
+        stable(feature = "forktable", since = "0.1.1") )]
     fn index(&self, index: &Q) -> &Self::Output {
         self.get(index)
             .expect("undefined index")
@@ -439,14 +439,14 @@ where K: Borrow<Q>,
 /// assert_eq!(table[&1], "one")
 /// ```
 #[cfg_attr(feature = "unstable",
-    unstable(feature = "forktable") )]
+    stable(feature = "forktable", since = "0.1.1") )]
 impl<'a, 'b, K, Q: ?Sized, V> ops::IndexMut<&'b Q> for ForkTable<'a, K, V>
 where K: Borrow<Q>,
       K: Eq + Hash,
       Q: Eq + Hash {
     #[inline]
     #[cfg_attr(feature = "unstable",
-        unstable(feature = "forktable") )]
+        stable(feature = "forktable", since = "0.1.1") )]
     fn index_mut(&mut self, index: &Q) -> &mut V {
         self.get_mut(index)
             .expect("undefined index")

@@ -45,7 +45,7 @@ extern crate byteorder;
 
 /// Functions for encoding and decoding Seax bytecode.
 #[cfg_attr(feature = "unstable",
-    unstable(feature = "bytecode") )]
+    unstable(feature = "bytecode", issue = "94") )]
 pub mod bytecode;
 
 /// General-purpose code for compilers targeting the Seax platform.

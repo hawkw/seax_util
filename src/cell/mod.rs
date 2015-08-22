@@ -10,7 +10,7 @@ mod tests;
 
 #[macro_export]
 #[cfg_attr(feature = "unstable",
-    unstable(feature = "list") )]
+    stable(feature = "list", since = "0.1.1") )]
 macro_rules! list_cell {
     [ $first:expr, $($rest:expr),+ ] => {
         ListCell(Box::new( list!( $first, $( $rest),+ ) ))
@@ -33,7 +33,7 @@ pub enum SVMCell {
         stable(feature="vm_core", since="0.1.0") )]
     ListCell(Box<List<SVMCell>>),
     #[cfg_attr(feature = "unstable",
-    stable(feature="vm_core", since="0.1.0") )]
+        stable(feature="vm_core", since="0.1.0") )]
     InstCell(Inst)
 }
 
@@ -544,6 +544,6 @@ pub enum Inst {
     /// Applies a closure and captures the continuation that can
     /// then be applied with `ap`.
     #[cfg_attr(feature = "unstable",
-        unstable(feature = "callcc"))]
+        unstable(feature = "callcc", issue = "69"))]
     APCC = 0x04,
 }

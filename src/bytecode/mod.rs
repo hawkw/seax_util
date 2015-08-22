@@ -177,7 +177,7 @@ const BYTE_NIL: u8        = 0x00;
 ///
 /// Decodes a whole program, including the identifying and version bytes.
 #[cfg_attr(feature = "unstable",
-    unstable(feature = "decode") )]
+    unstable(feature = "decode", issue = "94") )]
 pub fn decode_program<R>(source: &mut R) -> Result<List<SVMCell>, String>
 where R: Read {
     let mut decoder = Decoder::new(source);
