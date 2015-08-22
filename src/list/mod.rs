@@ -3,6 +3,7 @@ pub use list::List::{Cons,Nil};
 use std::fmt;
 use std::ops::Index;
 use std::iter::{IntoIterator, FromIterator};
+use std::default::Default;
 
 /// Convenience macro for making lists.
 ///
@@ -465,6 +466,13 @@ where T: fmt::Debug {
         }
     }
 
+}
+#[cfg_attr(feature = "unstable",
+    stable(feature = "list", since="0.1.2") )]
+impl<T> Default for List<T> {
+    #[cfg_attr(feature = "unstable",
+        stable(feature = "list", since="0.1.2") )]
+    fn default() -> Self { List::new() }
 }
 
 
