@@ -55,7 +55,7 @@ deploy:
   provider: releases
   api_key:
     secure: NFUphxwIrSKGyM0FVjQYCLXn0nsVSXrGTeOsI59dKuEKvnG9Y2xzNIYAiRVRTdugaEgRNtx+EoI5hGNpf+7jhDRoL46IptqPUYGeurLWb482idcpEZbE3m1WIdnBIQSTzjk9CWIzZ8IVjHdP7jNDSBqL8kMq8ueKeI8ELLiDnlpN5afMv9PogN/THnUf8NorU6aqje9GPl0dwBnyOJLEF3Dyv5S+s++DzRtaIi88GwWrHb9GQBoPAUTyowsUp+nf+ka/EkS0Vhye8o1TXdI3tqEbK5kbN+vXkUStdXTOwx8h1i/1gw8TqyJ3EYEJgSwMekjCS2DdORF2KBeEjXhH3r2DjJdeEbq7+kMvHquG2SAGlb7Q0tM1M5UJQsbGUBQTMmXg/9bFUcExxfvuyWShZ6WQ+BkGy1+gNwJzP6h0l5AtDtPNz9ObEDx2JW5gJDFRypMfQJDANe9hpfOfaCTjkNt2W5cd6xJqQlEFRh7K1Y10GrtB4mGuqm0iozPcDocNQqOtCjdlHbXakunLxEYlJhSf9SqdAAg/BeUv0mdXPhzu5yUAJ84zxj3WMDP8RlKBj+CS1sTglSe7vprKVD+NC/DfBMO9UX2LgRtEv5CILZftnNWwQB5TnQ/i3eGWqbTOv+fgwZTSCZbKYyPNuJ5fT+EHaB+Y8O+I655R4ImT9nY=
-  file: /target/release/libseax_util.rlib
+  file: target/release/libseax_util.rlib
   on:
     repo: hawkw/seax_util
     rust: nightly
