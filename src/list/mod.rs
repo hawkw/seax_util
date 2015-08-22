@@ -159,7 +159,7 @@ impl<T> Stack<T> for List<T> {
 // space and in terms of time taken to update the cache) would be worth
 // the performance benefits --- my guess is that caching is worth the added
 // costs (as usual).
-#[derive(PartialEq,Clone)]
+#[derive(PartialEq,Eq,Hash,Clone)]
 #[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
 pub enum List<T> {
