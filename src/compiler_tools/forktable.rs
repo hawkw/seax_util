@@ -358,6 +358,20 @@ where K: Eq + Hash
     /// Note that the new `ForkTable<K,V>` has a lifetime
     /// bound ensuring that it will live at least as long as the
     /// parent `ForkTable`.
+    ///
+    /// # Examples
+    ///
+    /// Forking the same table twice:
+    ///
+    /// ```
+    /// # use seax_util::compiler_tools::ForkTable;
+    /// let mut level_1: ForkTable<isize,&str> = ForkTable::new();
+    /// let mut level_2_a = level_1.fork();
+    /// let mut level_2_b = level_1.fork();
+    /// level_2_a.insert(1, "one");
+    /// assert_eq!(level_2_a.contains_key(&1), true);
+    /// assert_eq!(level_2_b.contains_key(&1), false);
+    /// ```
     #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn fork(&'a self) -> ForkTable<'a, K,V> {
