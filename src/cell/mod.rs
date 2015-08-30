@@ -4,6 +4,7 @@ pub use self::Atom::*;
 use super::List;
 
 use std::{fmt,ops};
+use std::mem::transmute;
 
 #[cfg(test)]
 mod tests;
@@ -116,7 +117,7 @@ impl fmt::Debug for Atom {
 macro_rules! e {
     ($e:expr) => { $e }
 }
-macro_rules! impl_ops {
+macro_rules! impl_arith_ops {
     ($name:ident, $path:path, $symbol:tt) => {
         impl $path for Atom {
             type Output = Atom;
@@ -151,11 +152,41 @@ macro_rules! impl_ops {
     }
 }
 
-impl_ops!(add, ops::Add, +);
-impl_ops!(sub, ops::Sub, -);
-impl_ops!(div, ops::Div, /);
-impl_ops!(mul, ops::Mul, *);
-impl_ops!(rem, ops::Rem, %);
+impl_arith_ops!(add, ops::Add, +);
+impl_arith_ops!(sub, ops::Sub, -);
+impl_arith_ops!(div, ops::Div, /);
+impl_arith_ops!(mul, ops::Mul, *);
+impl_arith_ops!(rem, ops::Rem, %);
+
+macro_rules! impl_bit_ops {
+    ($name:ident, $path:path, $symbol:tt) => {
+        impl $path for Atom {
+            type Output = Atom;
+            fn $name(self, other: Atom) -> Atom {
+                unsafe {
+                    match (self, other) {
+                        // same type: no coercion
+                        (SInt(a), SInt(b))      => SInt(e!(a $symbol b)),
+                        (UInt(a), UInt(b))      => UInt(e!(a $symbol b)),
+                        (Char(a), Char(b))      => Char(e!(a as u8 $symbol b as u8) as char),
+                        // floats do not support bit ops, so type error
+                        // (SVM should check this and provide more appropriate error
+                        //  messages, so these panics should never actually happen)
+                        (Float(_), _)     => panic!("floats do not support bit ops"),
+                        (_, Float(_))     => panic!("floats do not support bit ops"),
+                        (UInt(a), SInt(b))      => SInt(e!(transmute::<u64,i64>(a) $symbol b) ),
+                        (SInt(a), UInt(b))      => SInt(e!(a $symbol transmute::<u64,i64>(b)) ),
+                        _ => unimplemented!() // todo: figure out truncating to char
+                    }
+                }
+            }
+        }
+    }
+}
+
+impl_bit_ops!(bitand, ops::BitAnd, &);
+impl_bit_ops!(bitor, ops::BitOr, |);
+impl_bit_ops!(bitxor, ops::BitXor, ^);
 
 /// SVM instruction types.
 ///
