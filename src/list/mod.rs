@@ -3,6 +3,7 @@ pub use list::List::{Cons,Nil};
 use std::fmt;
 use std::ops::Index;
 use std::iter::{IntoIterator, FromIterator};
+use std::default::Default;
 
 /// Convenience macro for making lists.
 ///
@@ -34,7 +35,7 @@ mod tests;
 /// Common functions for an immutable Stack abstract data type.
 #[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
-pub trait Stack<T> {
+pub trait Stack<T>: Sized {
 
     /// Push an item to the top of the stack, returning a new stack
     #[cfg_attr(feature = "unstable",
@@ -159,7 +160,7 @@ impl<T> Stack<T> for List<T> {
 // space and in terms of time taken to update the cache) would be worth
 // the performance benefits --- my guess is that caching is worth the added
 // costs (as usual).
-#[derive(PartialEq,Clone)]
+#[derive(PartialEq,Eq,Hash,Clone)]
 #[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
 pub enum List<T> {
@@ -439,7 +440,8 @@ impl<T> List<T> {
 }
 #[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
-impl<'a, T> fmt::Display for List<T> where T: fmt::Display {
+impl<'a, T> fmt::Display for List<T>
+where T: fmt::Display {
     #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -453,7 +455,8 @@ impl<'a, T> fmt::Display for List<T> where T: fmt::Display {
 
 #[cfg_attr(feature = "unstable",
     stable(feature = "list", since="0.1.0") )]
-impl<'a, T> fmt::Debug for List<T> where T: fmt::Debug {
+impl<'a, T> fmt::Debug for List<T>
+where T: fmt::Debug {
     #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -463,6 +466,13 @@ impl<'a, T> fmt::Debug for List<T> where T: fmt::Debug {
         }
     }
 
+}
+#[cfg_attr(feature = "unstable",
+    stable(feature = "list", since="0.1.2") )]
+impl<T> Default for List<T> {
+    #[cfg_attr(feature = "unstable",
+        stable(feature = "list", since="0.1.2") )]
+    fn default() -> Self { List::new() }
 }
 
 
