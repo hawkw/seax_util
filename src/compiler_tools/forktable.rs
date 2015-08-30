@@ -365,16 +365,25 @@ where K: Eq + Hash
     ///
     /// ```
     /// # use seax_util::compiler_tools::ForkTable;
-    /// let mut level_1: ForkTable<isize,&str> = ForkTable::new();
+    /// let level_1: ForkTable<isize,&str> = ForkTable::new();
     /// let mut level_2_a = level_1.fork();
     /// let mut level_2_b = level_1.fork();
     /// level_2_a.insert(1, "one");
     /// assert_eq!(level_2_a.contains_key(&1), true);
     /// assert_eq!(level_2_b.contains_key(&1), false);
     /// ```
+    /// ```
+    /// # use seax_util::compiler_tools::ForkTable;
+    /// let level_1: ForkTable<isize,&str> = ForkTable::new();
+    /// let mut level_2_a = level_1.fork();
+    /// let mut level_2_b = level_1.fork();
+    /// level_2_a.insert(1, "one");
+    /// assert_eq!(level_2_a.fork().chain_contains_key(&1), true);
+    /// assert_eq!(level_2_b.fork().chain_contains_key(&1), false);
+    /// ```
     #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
-    pub fn fork(&'a self) -> ForkTable<'a, K,V> {
+    pub fn fork(&'a self) -> ForkTable<'a, K, V> {
         ForkTable {
             table: HashMap::new(),
             whiteouts: HashSet::new(),
@@ -386,7 +395,7 @@ where K: Eq + Hash
     /// Constructs a new `ForkTable<K,V>`
     #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
-    pub fn new() -> ForkTable<'a, K,V> {
+    pub fn new() -> ForkTable<'a, K, V> {
         ForkTable {
             table: HashMap::new(),
             whiteouts: HashSet::new(),
