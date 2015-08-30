@@ -16,8 +16,8 @@ pub trait ASTNode {
     #[cfg_attr(feature = "unstable",
         stable(feature = "compile", since = "0.0.1") )]
     fn compile<'a>(&'a self,
-                   state: &'a SymTable<'a>
-                   )                    -> CompileResult;
+                   state: &'a SymTable<'a>)
+                   -> CompileResult;
 
     /// Pretty-print this node to a String.
     ///
@@ -26,7 +26,9 @@ pub trait ASTNode {
     /// every step.
     #[cfg_attr(feature = "unstable",
         stable(feature = "ast", since = "0.0.1") )]
-    fn prettyprint(&self)               -> String { self.print_level(0) }
+    fn prettyprint(&self) -> String {
+        self.print_level(0)
+    }
 
     /// Pretty-print this node at the desired indent level
     #[cfg_attr(feature = "unstable",
