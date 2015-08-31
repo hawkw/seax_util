@@ -29,7 +29,7 @@ pub mod ast;
 /// programming language
 /// (https://github.com/Marwes/embed_lang/blob/master/base/src/ast.rs#L99).
 #[cfg_attr(feature = "unstable",
-    unstable(feature = "location") )]
+    unstable(feature = "location", issue = "4") )]
 pub mod location;
 
 // Reexports
