@@ -465,6 +465,7 @@ pub trait Encode {
         stable(feature = "encode", since="0.1.0") )]
     fn emit(&self) -> Vec<u8>;
 }
+
 #[cfg_attr(feature = "unstable",
     stable(feature = "encode", since="0.1.0") )]
 impl Encode for SVMCell {
