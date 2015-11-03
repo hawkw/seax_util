@@ -192,6 +192,8 @@ const CONST_END: u8       = CONST_START + CONST_LEN;
 const BYTE_CONS: u8       = 0xC0;
 const BYTE_NIL: u8        = 0x00;
 
+pub type DecodeResult<T> = Result<Option<T>, String>;
+
 /// Decode a whole program
 ///
 /// Decodes a whole program, including the identifying and version bytes.
@@ -359,7 +361,7 @@ where R: Read {
     // Consumes a varying number of bytes depending on the length of the list.
     #[cfg_attr(feature = "unstable",
         stable(feature = "decode", since="0.1.0") )]
-    fn decode_cons(&mut self) -> Result<Option<Box<List<SVMCell>>>, String> {
+    fn decode_cons(&mut self) -> DecodeResult<Box<List<SVMCell>>> {
         self.next_cell()
             .and_then(|car|
                 car.ok_or(String::from("EOF while decoding CONS cell")) )
@@ -372,10 +374,11 @@ where R: Read {
                          .map_err(|why| String::from(why.description())));
                 self.num_read += 1;
                 match buf[0] {
-                    BYTE_CONS => self.decode_cons()
-                                     .and_then(|cdr| cdr.ok_or(
-                                        String::from("EOF while decoding CONS")) )
-                                     .map( |cdr| (car, cdr) ),
+                    BYTE_CONS =>
+                        self.decode_cons()
+                            .and_then(|cdr| cdr.ok_or(
+                                String::from("EOF while decoding CONS")) )
+                            .map( |cdr| (car, cdr) ),
                     BYTE_NIL  => Ok((car, Box::new(Nil))),
                     b         => Err(
                         format!("Unexpected byte {:#02x} while decoding CONS", b)
@@ -388,7 +391,7 @@ where R: Read {
     /// Decodes the next cell in the source
     #[cfg_attr(feature = "unstable",
         stable(feature = "decode", since="0.1.0") )]
-    pub fn next_cell(&mut self) -> Result<Option<SVMCell>,String> {
+    pub fn next_cell(&mut self) -> DecodeResult<SVMCell> {
         let mut buf = [0;1];
         match self.source.read(&mut buf) {
             Ok(1)   => { // a byte was read
