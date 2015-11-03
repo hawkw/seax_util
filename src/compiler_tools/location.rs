@@ -4,7 +4,7 @@ use std::ops;
 /// Represents a location within a source code file
 #[derive(Copy, Clone, PartialEq, Debug)]
 #[cfg_attr(feature = "unstable",
-    unstable(feature = "location") )]
+    unstable(feature = "location", issue = "4") )]
 pub struct Location {
     #[cfg_attr(feature = "unstable",
         unstable(feature = "location", issue = "4") )]
@@ -52,7 +52,7 @@ impl<T> fmt::Display for AtLocation<T> where T: fmt::Display {
 impl<T> ops::Deref for AtLocation<T> {
     type Target = T;
     #[cfg_attr(feature = "unstable",
-        unstable(feature = "location") )]
+        unstable(feature = "location", issue = "4") )]
     fn deref(&self) -> &T {
         &self.value
     }
