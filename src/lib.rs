@@ -2,6 +2,7 @@
 #![crate_type = "lib"]
 #![cfg_attr(feature = "unstable", feature(vec_push_all))]
 #![cfg_attr(feature = "unstable", feature(staged_api))]
+#![cfg_attr(feature = "unstable", feature(const_fn))]
 #![cfg_attr(feature = "unstable", staged_api)]
 #![cfg_attr(feature = "unstable", stable(feature = "util", since = "0.0.1"))]
 
@@ -57,3 +58,15 @@ pub mod compiler_tools;
 pub use self::list::{List, Stack};
 pub use self::list::List::{Cons,Nil};
 pub use self::cell::{SVMCell,Atom,Inst};
+
+#[cfg_attr(feature = "unstable",
+    stable(feature = "compile", since = "0.1.3") )]
+pub fn version() -> String {
+    format!("Seax Utilities {}", env!("CARGO_PKG_VERSION"))
+}
+
+#[cfg_attr(feature = "unstable",
+    stable(feature = "compile", since = "0.1.3") )]
+pub fn bytecode_version() -> String {
+    format!("Seax bytecode v{}", bytecode::VERSION )
+}
