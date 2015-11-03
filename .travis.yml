@@ -4,6 +4,9 @@ rust:
   - nightly
   - beta
   - stable
+os:
+  - linux
+  - osx
 
 # install Coveralls dependencies
 addons:
@@ -13,11 +16,19 @@ addons:
       - libelf-dev
       - libdw-dev
 
-# Fetch travis-cargo
-before_script:
+
+install:
+  # install travis-cargo
+  - pip install 'travis-cargo<0.2' --user
+  # place travis-cargo on the PATH
   - |
-    pip install 'travis-cargo<0.2' --user &&
-    export PATH=$HOME/.local/bin:$PATH
+      if [ $TRAVIS_OS_NAME = linux ]; then
+        export PATH=$HOME/.local/bin:$PATH
+      fi
+      if [ $TRAVIS_OS_NAME = osx ]; then
+        export PATH=$HOME/Library/Python/2.7/bin:$PATH
+      fi
+      echo $PATH
 
 script:
   # build
@@ -33,8 +44,11 @@ env:
   - secure: c4Rwaqr4L5U3DFhtqwwZmpzNmLJZUhNXAkrh307T4k/98QFQMSZPyTtBSXVbHUaiVr9rAqVeVv/Q/+jKUSznLSbV5Q8eIzbbC4oHv7lpvLJTfsuFrDnhr2z51J3sZeUh4h1j2xioybdTr8zoYMVEuBLqx/x30v6swA69F8H8uroLazMPv4POHYWaIFrtzCSZZ7/r1hlasTqA2bezFcq0Hl5ZTht+GN0AsYGcQNuFV8O5KfPyeuI9HOgD43Xg1vaRlRJomtVPklifKNFmCRWhAdA8ARsgJRHbFsoddS6oJhOhtquJg6sscndVpyf0mco0POCqwij/X4rKqpH8worUm+DsYmaytvbUzTPVTo08G6ctZLo4ARoN0X09c5xux4gG79JS0M77s+iJm5f5jye66RwXD/hs5TvSX3i1odspBSLLnY5HPwXr9R2FOZ4wSPei5SyW3BpzJspIjZSFDeCVDPTA0um1gaJy35WWBwE+EeR3aKXhvSitZtKIclIw+t7T4KVgBvVbxeteo4W9rw60/Be4PyzBNUgRz7gizAxhtl4ysQnMrbaxgaijRBDxq4dkae3oBvMKOWzLydo9ZOoRY9oRP9zjkzgFfPBnDONsHi0ffFkNQKKMSwMt9EPQshlgqYZBLVP+6KGI1cDAX1c7K9oLxnZ6RRkGCgKRL2OCxeA=
 
 after_success:
-  # report coverage to coveralls
-  - travis-cargo coveralls --no-sudo
+  # report coverage to coveralls (linux only)
+  - |
+      if [ $TRAVIS_OS_NAME = linux ]; then
+        travis-cargo coveralls --no-sudo
+      fi
   # report coverage to codecov.io
   - bash <(curl https://codecov.io/bash)
 
@@ -60,3 +74,4 @@ deploy:
     repo: hawkw/seax_util
     rust: nightly
     tags: true
+    os: linux
