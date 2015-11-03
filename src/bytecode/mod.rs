@@ -192,6 +192,8 @@ const CONST_END: u8       = CONST_START + CONST_LEN;
 const BYTE_CONS: u8       = 0xC0;
 const BYTE_NIL: u8        = 0x00;
 
+#[cfg_attr(feature = "unstable",
+    stable(feature = "decode", since="0.1.3") )]
 pub type DecodeResult<T> = Result<Option<T>, String>;
 
 /// Decode a whole program
