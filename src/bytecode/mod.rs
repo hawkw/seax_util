@@ -174,6 +174,7 @@ macro_rules! push_all {
 #[cfg_attr(feature = "unstable",
     stable(feature = "decode", since = "0.1.0") )]
 pub const IDENT_BYTES: u16 = 0x5ECD;
+
 /// Identifying bytes for this version of the Seax bytecode standard.
 #[cfg_attr(feature = "unstable",
     stable(feature = "decode", since="0.3.0") )]
@@ -182,9 +183,11 @@ pub const VERSION: u16     = 0x0000;
 /// block reserved for future opcodes
 const RESERVED_START: u8  = 0x1E;
 const RESERVED_LEN: u8    = 0x12;
+const RESERVED_END: u8    = RESERVED_START + RESERVED_LEN;
 /// block reserved for typetags
 const CONST_START: u8     = 0xC1;
 const CONST_LEN: u8       = 0x0E;
+const CONST_END: u8       = CONST_START + CONST_LEN;
 /// important bytecodes
 const BYTE_CONS: u8       = 0xC0;
 const BYTE_NIL: u8        = 0x00;
@@ -220,14 +223,13 @@ pub struct Decoder<'a, R: 'a> {
     stable(feature = "decode", since="0.1.0"))]
 fn decode_inst(byte: &u8) -> Result<Inst, String> {
     match *byte {
-        b if b >= BYTE_NIL && b < RESERVED_START =>
-            unsafe { Ok(transmute(b)) },
-        b if b >= RESERVED_START &&
-             b <= (RESERVED_START + RESERVED_LEN) =>
-            Err(format!("Unimplemented: reserved byte {:#X}", b)),
-        b if b > (RESERVED_START + RESERVED_LEN) =>
+        BYTE_NIL ... 0x1D =>
+            unsafe { Ok(transmute(*byte)) },
+        RESERVED_START ... RESERVED_END =>
+            Err(format!("Unimplemented: reserved byte {:#X}", byte)),
+        b if b > RESERVED_END =>
             Err(String::from("byte too high")),
-        _  => unreachable!() // Should require an act of God.
+        _ => unreachable!()
     }
 }
 
@@ -360,23 +362,20 @@ where R: Read {
     fn decode_cons(&mut self) -> Result<Option<Box<List<SVMCell>>>, String> {
         self.next_cell()
             .and_then(|car|
-                car.ok_or(String::from("EOF while decoding CONS cell"))
-            )
+                car.ok_or(String::from("EOF while decoding CONS cell")) )
             .map(|car| {
                 debug!("Decoded {:?}, {} bytes read", car, self.num_read);
-                car
-            })
+                car })
             .and_then(|car| {
                 let mut buf = [0;1];
                 try!(self.source.read(&mut buf) // try to get next byte
                          .map_err(|why| String::from(why.description())));
                 self.num_read += 1;
                 match buf[0] {
-                    BYTE_CONS =>
-                        self.decode_cons()
-                            .and_then(|cdr| cdr.ok_or(
-                                String::from("EOF while decoding CONS")) )
-                            .map( |cdr| (car, cdr) ),
+                    BYTE_CONS => self.decode_cons()
+                                     .and_then(|cdr| cdr.ok_or(
+                                        String::from("EOF while decoding CONS")) )
+                                     .map( |cdr| (car, cdr) ),
                     BYTE_NIL  => Ok((car, Box::new(Nil))),
                     b         => Err(
                         format!("Unexpected byte {:#02x} while decoding CONS", b)
@@ -393,26 +392,26 @@ where R: Read {
         let mut buf = [0;1];
         match self.source.read(&mut buf) {
             Ok(1)   => { // a byte was read
+                let byte = buf[0];
                 self.num_read += 1;
-                debug!("Read {:#X}, {} bytes read", buf[0], self.num_read);
-                match buf[0] {
-                    b if b < 0x30 => decode_inst(&b)
-                                        .map(SVMCell::InstCell)
-                                        .map(Some),
-                    b if b >= CONST_START &&
-                         b < (CONST_START + CONST_LEN) =>
-                                    self.decode_const(&b)
-                                        .map(SVMCell::AtomCell)
-                                        .map(Some),
-                    BYTE_CONS    => self.decode_cons()
-                                        .map(|cell|
-                                              cell.map(SVMCell::ListCell)
-                                        ),
-                    b            => Err(format!("Unsupported byte {:#02x}", b))
+                debug!("Read {:#X}, {} bytes read", byte, self.num_read);
+                match byte {
+                    BYTE_NIL ... 0x2F =>
+                        decode_inst(&byte)
+                            .map(SVMCell::InstCell)
+                            .map(Some),
+                    CONST_START ... CONST_END =>
+                        self.decode_const(&byte)
+                            .map(SVMCell::AtomCell)
+                            .map(Some),
+                    BYTE_CONS =>
+                        self.decode_cons()
+                            .map(|cell| cell.map(SVMCell::ListCell)),
+                    _ => Err(format!("Unsupported byte {:#02x}", byte))
                 }
             },
             Ok(0)    => Ok(None), //  we're out of bytes - EOF
-            Ok(_)    => unreachable!(), //
+            Ok(_)    => unreachable!(), // this should be impossible?
             Err(why) => Err(String::from(why.description()))
         }
     }
@@ -434,6 +433,7 @@ where R: Read {
             .unwrap()
     }
 }
+
 #[cfg_attr(feature = "unstable",
     stable(feature = "decode", since="0.1.0") )]
 impl<'a, R> fmt::Debug for Decoder<'a, R>
