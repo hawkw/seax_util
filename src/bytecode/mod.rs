@@ -11,41 +11,49 @@
 //! I: The preamble
 //! ---------------
 //!
-//! All Seax Bytecode files begin with a preamble. This preamble consists of the following:
+//! All Seax Bytecode files begin with a preamble. This preamble consists
+//! of the following:
 //!
-//! 1. The identifying bytes 0x5ECD. These bytes, chosen based on a poorly-advised attempt to
-//!    spell out the abbreviation SECD in hexadecimal, identify the file as a Seax bytecode file.
-//! 2. A 16-bit unsigned integer that represents the version of the Seax bytecode format that the
-//!    file was encoded with. This number is used to determine how the remainder of the file should
-//!    be decoded. This document is Revision 0 of the Seax Bytecode format, so the version
-//!    should be 0x0000.
+//! 1. The identifying bytes 0x5ECD. These bytes, chosen based on a
+//!    poorly-advised attempt to spell out the abbreviation 'SECD' in
+//!    hexadecimal, identify the file as a Seax bytecode file.
+//! 2. A 16-bit unsigned integer that represents the version of the Seax
+//!    bytecode format that the
+//!    file was encoded with. This number is used to determine how the
+//!    remainder of the file should be decoded. This document is Revision 0
+//!    of the Seax Bytecode format, so the version should be 0x0000.
 //!
-//! Future revisions of this standard will allow additional metadata, such as the author's
-//! cryptographic signature, checksums for ensuring the executable's integrity, and directives to
-//! the virtual machine, to be placed in the preamble as well.
+//! Future revisions of this standard will allow additional metadata, such as
+//! the author's cryptographic signature, checksums for ensuring the
+//! executable's integrity, and directives to the virtual machine, to be placed
+//! in the preamble as well.
 //!
 //! II: Instructions
 //! ----------------
 //!
-//! All Seax VM instructions are encoded using single byes. The Seax opcodes occupy the
-//! space 0x00 to 0x30, with the bytes 0x1D through 0x3F being reserved for future use.
+//! All Seax VM instructions are encoded using single byes. The Seax opcodes
+//! occupy the range 0x00 to 0x30, with the bytes 0x1D through 0x3F being
+//! reserved for future use.
 //!
 //! The following table shows all of the currently available SVM opcodes.
 //!
 //! | Value | Name          | Description
-//! +-------+---------------+--------------------------------------------------------------------
+//!+-------+---------------+--------------------------------------------------
 //!   0x00  | NIL           | Pushes an empty list (nil) onto `$s`.
 //!   0x01  | LD (a . b)    | Pushes the variable at `$e[a][b]` onto the stack.
-//!   0x02  | LDF f         | Constructs a closure from the list `f` and the current environment,
-//!                           and pushes it to `$s`.
+//!   0x02  | LDF f         | Constructs a closure from the list `f` and the
+//!                         | current environment, and pushes it to `$s`.
 //!   0x03  | AP c          | Applies the function closure `c`.
-//!   0x04  | APCC c        | Applies the function closure `c` and pushes a continuation on `$d`.
-//!   0x05  | JOIN          | Returns control to the calling scope at the end of a `SEL`.
+//!   0x04  | APCC c        | Applies the function closure `c` and pushes a
+//!                         | continuation on `$d`.
+//!   0x05  | JOIN          | Returns control to the calling scope at the end
+//!                         | of a `SEL`.
 //!   0x06  | RAP c         | Applies the recursive closure `c`.
-//!   0x07  | RET           | Returns control from a function to the calling function.
+//!   0x07  | RET           | Returns control from a function to the calling
+//!                         | function.
 //!   0x08  | DUM           | Pushes a dummy environment to `$e` for applying a recursive function.
-//!   0x09  | SEL a         | Applies the first list of instructions on `$c` if `a` is non-nil,
-//!                           or the second list if it is nil.
+//!   0x09  | SEL a         | Applies the first list of instructions on `$c` if
+//!                         | `a` is non-nil, or the second list if it is nil.
 //!   0x0A  | ADD a b       |
 //!   0x0B  | SUB a b       |
 //!   0x0C  | MUL a b       |
@@ -73,41 +81,49 @@
 //! III: Constants
 //! --------------
 //!
-//! Constants are identified by a preceeding constant-identification byte. Constant-identification
-//! bytes comprise the range of bytes between 0xC0 and 0xCF, inclusive, and the NIL byte, 0x00.
+//! Constants are identified by a preceeding constant-identification byte.
+//! Constant-identification bytes comprise the range of bytes between 0xC0 and
+//! 0xCF, inclusive, and the NIL byte, 0x00.
 //!
-//! Constants are expected in two places: following either an LDC (LoaD Constant) instruction,
-//! or following an instruction that expects a list on $c, such as a SEL instruction.
+//! Constants are expected in two places: following either an LDC
+//! (LoaD Constant) instruction, or following an instruction that expects a
+//! list on $c, such as a SEL instruction.
 //!
 //! 1. CONS Cells (0xC0)
 //!
-//!    0xC0 identifies the beginning of a CONS cell constant. It may then be followed by the
-//!    identification byte denoting any other constant, which will be interpreted as the CAR part
-//!    of the CONS cell. This is followed by the actual bytecode data for the CAR part of the CONS
-//!    cell, which is of the length specified by the type identified by the identification byte.
+//!    0xC0 identifies the beginning of a CONS cell constant. It may then be
+//!    followed by the identification byte denoting any other constant, which
+//!    will be interpreted as the CAR part of the CONS cell. This is followed
+//!    by the actual bytecode data for the CAR part of the CONS cell, which is
+//!    of the length specified by the type identified by the identification
+//!    byte.
 //!
-//!    After the constant for the CAR part, there must be an additional identification byte, which
-//!    identifies the type of the CONS cell's CDR part. Unlike the CAR part, this may be any
-//!    constant type, including another CONS cell. This identification byte is again followed by
-//!    the bytecode for the data stored in the CONS cell's CDR part, whose length is determined
-//!    by the type identified by the identification byte.
+//!    After the constant for the CAR part, there must be an additional
+//!    identification byte, which identifies the type of the CONS cell's CDR
+//!    part. Unlike the CAR part, this may be any constant type, including
+//!    another CONS cell. This identification byte is again followed by
+//!    the bytecode for the data stored in the CONS cell's CDR part, whose
+//!    length is determined by the type identified by the identification byte.
 //!
-//!    Alternatively, the CAR or CDR parts of a CONS cell may also contain a Seax instruction. In
-//!    such a case, the identification byte is replaced by that instruction's opcode. The opcode
-//!    comprises the entirity of the CAR or CDR part, and any further data is interpreted as
-//!    appropriate (i.e., if the opcode is the CAR part, another opcode or identifying byte will
-//!    be expected, while if the opcode is in the CDR part, a new instruction or constant will
-//!    be expected.)
+//!    Alternatively, the CAR or CDR parts of a CONS cell may also contain a
+//!    Seax instruction. In such a case, the identification byte is replaced by
+//!    that instruction's opcode. The opcode comprises the entirity of the CAR
+//!    or CDR part, and any further data is interpreted as appropriate (i.e.,
+//!    if the opcode is the CAR part, another opcode or identifying byte will
+//!    be expected, while if the opcode is in the CDR part, a new instruction or
+//!    constant will be expected.)
 //!
 //! 2. Atom constants (0xC1 ... 0xCF)
 //!
-//!    Any constants that are not CONS cells are atom constants. Atom constants are identified by
-//!    bytes in the range between 0xC1 and 0xCF, inclusive. Currently, 0xC1, 0xC2, 0xC3, and 0xC4
-//!    identify extant atom types, while 0xC5 ... 0xCE are reserved for future use.
+//!    Any constants that are not CONS cells are atom constants. Atom constants
+//!    are identified by bytes in the range between 0xC1 and 0xCF, inclusive.
+//!    Currently, 0xC1, 0xC2, 0xC3, and 0xC4 identify extant atom types, while
+//!    0xC5 ... 0xCE are reserved for future use.
 //!
-//!    Once an atom constant identifying byte is read, the bytes that follow it will be read as
-//!    that type of atom. The number of bytes read depends on the length of the atom type, which is
-//!    determined using the identifying bytes. The following identifying bytes correspond to the
+//!    Once an atom constant identifying byte is read, the bytes that follow it
+//!    will be read as that type of atom. The number of bytes read depends on
+//!    the length of the atom type, which is determined using the identifying
+//!    bytes. The following identifying bytes correspond to the
 //!    following atom types:
 //!
 //! + 0xC1: uint atom (64-bit unsigned integer)
@@ -115,11 +131,11 @@
 //! + 0xC3: char atom (32-bit Unicode scalar value)
 //! + 0xC4: float atom (64-bit double-precision floating point number
 //!
-//!    If additional primitive data types are added to the Seax VM, the bytes 0xC5 to 0xCF will
-//!    be used to identify those types.
+//!    If additional primitive data types are added to the Seax VM, the bytes
+//!    0xC5 to 0xCF will be used to identify those types.
 //!
-//!    Note that the type tag identifying a constant may be extracted by byte-masking the
-//!    identifying byte with the number 0x0F.
+//!    Note that the type tag identifying a constant may be extracted
+//!    byte-masking the identifying byte with the number 0x0F.
 //!
 
 extern crate byteorder;
