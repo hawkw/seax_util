@@ -8,6 +8,11 @@ os:
   - linux
   - osx
 
+matrix:
+  allow_failures:
+   - rust: beta
+  fast_finish: true
+
 # install Coveralls dependencies
 addons:
   apt:
