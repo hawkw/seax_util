@@ -7,7 +7,7 @@
 //  <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
 //  option. This file may not be copied, modified, or distributed
 //  except according to those terms.
-//  
+//
 pub use list::List::{Cons,Nil};
 
 use std::fmt;
@@ -193,8 +193,15 @@ impl<T> List<T> {
     /// Creates a new empty list
     #[cfg_attr(feature = "unstable",
         stable(feature = "list", since="0.1.0") )]
+    #[cfg(not(feature = "unstable"))]
     #[inline]
     pub fn new() -> List<T> { Nil }
+
+    /// Creates a new empty list
+    #[cfg_attr(feature = "unstable",
+        stable(feature = "list", since="0.1.3") )]
+    #[cfg(feature = "unstable")]
+    pub const fn new() -> List<T> { Nil }
 
     /// Prepends the given item to the list.
     ///
