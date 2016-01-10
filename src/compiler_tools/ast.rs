@@ -1,3 +1,19 @@
+//  Seax
+//  Copyright 2016 Hawk Weisman.
+//
+//  Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+//  http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+//  <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+//  option. This file may not be copied, modified, or distributed
+//  except according to those terms.
+//  
+//! # AST
+//!
+//! Contains a trait definition for an abstract syntax tree (AST) node.
+//! Compilers targeting Seax should provide concrete implementations of this
+//! trait for their AST node types. This ensures a consistant interface for
+//! Seax compilers.
+
 use super::CompileResult;
 use super::SymTable;
 

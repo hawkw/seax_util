@@ -1,3 +1,20 @@
+//
+//  Seax
+//  Copyright 2016 Hawk Weisman.
+//
+//  Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+//  http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+//  <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+//  option. This file may not be copied, modified, or distributed
+//  except according to those terms.
+//
+//
+//! # Location
+//!
+//! Code for annotating AST nodes with source code locations. This is based
+//! loosely on ideas from code written by Markus Westerlind for the Embed
+//! programming language
+//! (https://github.com/Marwes/embed_lang/blob/master/base/src/ast.rs#L99).
 use std::fmt;
 use std::ops;
 

@@ -1,3 +1,18 @@
+//
+//  Seax
+//  Copyright 2016 Hawk Weisman.
+//
+//  Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+//  http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+//  <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+//  option. This file may not be copied, modified, or distributed
+//  except according to those terms.
+//
+//
+//! # ForkTable
+//!
+//! Contains an implementation of the `ForkTable` data structure for storing
+//! scoped data.
 use std::collections::{HashMap, HashSet};
 use std::collections::hash_map::{Keys,Values};
 use std::hash::Hash;
@@ -29,8 +44,7 @@ use super::{SymTable,Index,Scope};
 pub struct ForkTable<'a, K, V>
 where K: Eq + Hash,
       K: 'a,
-      V: 'a
-{
+      V: 'a {
     table: HashMap<K, V>,
     whiteouts: HashSet<K>,
     parent: Option<&'a ForkTable<'a, K, V>>,
@@ -40,8 +54,7 @@ where K: Eq + Hash,
 #[cfg_attr(feature = "unstable",
     stable(feature = "forktable", since = "0.0.1") )]
 impl<'a, K, V> ForkTable<'a, K, V>
-where K: Eq + Hash
-{
+where K: Eq + Hash {
 
     /// Returns a reference to the value corresponding to the key.
     ///
@@ -84,8 +97,7 @@ where K: Eq + Hash
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn get<Q: ?Sized>(&self, key: &Q) -> Option<&V>
     where K: Borrow<Q>,
-          Q: Hash + Eq
-    {
+          Q: Hash + Eq {
         if self.whiteouts.contains(key) {
             None
         } else {
@@ -194,8 +206,7 @@ where K: Eq + Hash
     #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn remove(&mut self, key: &K) -> Option<V>
-    where K: Clone
-    {
+    where K: Clone {
         if self.table.contains_key(&key) {
             self.table.remove(&key)
         } else if self.chain_contains_key(&key) {
@@ -296,8 +307,7 @@ where K: Eq + Hash
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn contains_key<Q: ?Sized>(&self, key: &Q) -> bool
     where K: Borrow<Q>,
-          Q: Hash + Eq
-    {
+          Q: Hash + Eq {
         !self.whiteouts.contains(key) &&
          self.table.contains_key(key)
     }
@@ -340,8 +350,7 @@ where K: Eq + Hash
         stable(feature = "forktable", since = "0.0.1") )]
     pub fn chain_contains_key<Q:? Sized>(&self, key: &Q) -> bool
     where K: Borrow<Q>,
-          Q: Hash + Eq
-    {
+          Q: Hash + Eq {
         self.table.contains_key(key) ||
             (!self.whiteouts.contains(key) &&
                 self.parent
@@ -474,8 +483,7 @@ where K: Borrow<Q>,
 impl<'a, 'b, K, Q: ?Sized, V> ops::IndexMut<&'b Q> for ForkTable<'a, K, V>
 where K: Borrow<Q>,
       K: Eq + Hash,
-      Q: Eq + Hash
-{
+      Q: Eq + Hash {
     #[inline]
     #[cfg_attr(feature = "unstable",
         stable(feature = "forktable", since = "0.1.2") )]

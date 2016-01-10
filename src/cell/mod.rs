@@ -124,28 +124,28 @@ macro_rules! impl_arith_ops {
             fn $name(self, other: Atom) -> Atom {
                 match (self, other) {
                     // same type: no coercion
-                    (SInt(a), SInt(b))      => SInt(e!(a $symbol b)),
-                    (UInt(a), UInt(b))      => UInt(e!(a $symbol b)),
-                    (Float(a), Float(b))    => Float(e!(a $symbol b)),
-                    (Char(a), Char(b))      => Char(e!(a as u8 $symbol b as u8) as char),
+                    (SInt(a), SInt(b))   => SInt(e!(a $symbol b)),
+                    (UInt(a), UInt(b))   => UInt(e!(a $symbol b)),
+                    (Float(a), Float(b)) => Float(e!(a $symbol b)),
+                    (Char(a), Char(b))   => Char(e!(a as u8 $symbol b as u8) as char),
                     // float & int: coerce to float
-                    (Float(a), SInt(b))     => Float(e!(a $symbol b as f64)),
-                    (Float(a), UInt(b))     => Float(e!(a $symbol b as f64) ),
-                    (SInt(a), Float(b))     => Float(e!(a as f64 $symbol b)),
-                    (UInt(a), Float(b))     => Float(e!(a as f64 $symbol b)),
+                    (Float(a), SInt(b))  => Float(e!(a $symbol b as f64)),
+                    (Float(a), UInt(b))  => Float(e!(a $symbol b as f64) ),
+                    (SInt(a), Float(b))  => Float(e!(a as f64 $symbol b)),
+                    (UInt(a), Float(b))  => Float(e!(a as f64 $symbol b)),
                     // uint & sint: coerce to sint
-                    (UInt(a), SInt(b))      => SInt(e!(a as i64 $symbol b)),
-                    (SInt(a), UInt(b))      => SInt(e!(a $symbol b as i64)),
+                    (UInt(a), SInt(b))   => SInt(e!(a as i64 $symbol b)),
+                    (SInt(a), UInt(b))   => SInt(e!(a $symbol b as i64)),
                     // char & any: coerce to char
                     // because of the supported operations on Rust chars,
                     // everything has to be cast to u8 (byte) to allow
                     // arithmetic ops and then cast back to char.
-                    (Char(a), UInt(b))      => Char(e!(a as u8 $symbol b as u8) as char),
-                    (Char(a), SInt(b))      => Char(e!(a as u8 $symbol b as u8) as char),
-                    (Char(a), Float(b))     => Char(e!(a as u8 $symbol b as u8) as char),
-                    (UInt(a), Char(b))      => Char(e!(a as u8 $symbol b as u8) as char),
-                    (SInt(a), Char(b))      => Char(e!(a as u8 $symbol b as u8) as char),
-                    (Float(a), Char(b))     => Char(e!(a as u8 $symbol b as u8) as char)
+                    (Char(a), UInt(b))   => Char(e!(a as u8 $symbol b as u8) as char),
+                    (Char(a), SInt(b))   => Char(e!(a as u8 $symbol b as u8) as char),
+                    (Char(a), Float(b))  => Char(e!(a as u8 $symbol b as u8) as char),
+                    (UInt(a), Char(b))   => Char(e!(a as u8 $symbol b as u8) as char),
+                    (SInt(a), Char(b))   => Char(e!(a as u8 $symbol b as u8) as char),
+                    (Float(a), Char(b))  => Char(e!(a as u8 $symbol b as u8) as char)
                 }
             }
         }

@@ -1,33 +1,25 @@
+//
+//  Seax
+//  Copyright 2016 Hawk Weisman.
+//
+//  Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+//  http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+//  <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+//  option. This file may not be copied, modified, or distributed
+//  except according to those terms.
+//
 use std::hash::Hash;
 use super::SVMCell;
 
-/// ForkTable
-/// ---------
-///
-/// Contains an implementation of the `ForkTable` data structure for storing
-/// scoped data.
 #[cfg_attr(feature = "unstable",
     stable(feature = "forktable", since = "0.0.1") )]
 pub mod forktable;
 
-/// AST
-/// ---
-///
-/// Contains a trait definition for an abstract syntax tree (AST) node.
-/// Compilers targeting Seax should provide concrete implementations of this
-/// trait for their AST node types. This ensures a consistant interface for
-/// Seax compilers.
+
 #[cfg_attr(feature = "unstable",
     stable(feature = "ast", since = "0.0.1") )]
 pub mod ast;
 
-/// Location
-/// --------
-///
-/// Code for annotating AST nodes with source code locations. This is based
-/// loosely on ideas from code written by Markus Westerlind for the Embed
-/// programming language
-/// (https://github.com/Marwes/embed_lang/blob/master/base/src/ast.rs#L99).
 #[cfg_attr(feature = "unstable",
     unstable(feature = "location", issue = "4") )]
 pub mod location;

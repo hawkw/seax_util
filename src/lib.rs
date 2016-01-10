@@ -1,11 +1,13 @@
-#![crate_name = "seax_util"]
-#![crate_type = "lib"]
-#![cfg_attr(feature = "unstable", feature(vec_push_all))]
-#![cfg_attr(feature = "unstable", feature(staged_api))]
-#![cfg_attr(feature = "unstable", feature(const_fn))]
-#![cfg_attr(feature = "unstable", staged_api)]
-#![cfg_attr(feature = "unstable", stable(feature = "util", since = "0.0.1"))]
-
+//
+//  Seax
+//  Copyright 2016 Hawk Weisman.
+//
+//  Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+//  http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+//  <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+//  option. This file may not be copied, modified, or distributed
+//  except according to those terms.
+//
 //! Utility library containing code for building programs involving the
 //! [Seax](hawkweisman.me/seax) platform. Seax is a virtual-machine-based
 //! runtime environment for functional programming languages.
@@ -21,6 +23,13 @@
 //! + `compiler_tools`: Contains reusable code for implementing compilers
 //!   targeting the Seax platform, including traits for abstract syntax trees
 //!   and symbol tables.
+#![crate_name = "seax_util"]
+#![crate_type = "lib"]
+#![cfg_attr(feature = "unstable", feature(vec_push_all))]
+#![cfg_attr(feature = "unstable", feature(staged_api, deprecated))]
+#![cfg_attr(feature = "unstable", feature(const_fn))]
+#![cfg_attr(feature = "unstable", staged_api)]
+#![cfg_attr(feature = "unstable", stable(feature = "util", since = "0.0.1"))]
 
 #[macro_use] extern crate log;
 #[cfg(test)] extern crate quickcheck;
