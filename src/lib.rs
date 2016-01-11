@@ -28,7 +28,6 @@
 #![cfg_attr(feature = "unstable", feature(vec_push_all))]
 #![cfg_attr(feature = "unstable", feature(staged_api, deprecated))]
 #![cfg_attr(feature = "unstable", feature(const_fn))]
-#![cfg_attr(feature = "unstable", staged_api)]
 #![cfg_attr(feature = "unstable", stable(feature = "util", since = "0.0.1"))]
 
 #[macro_use] extern crate log;
